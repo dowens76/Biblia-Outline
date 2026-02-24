@@ -2,7 +2,9 @@
 
 console.log('Bible Outline Builder content script loaded');
 
-// Returns a verse element at or above `el`, or null
+// ── Verse element detection ──────────────────────────────────────────────────
+
+// Returns the nearest verse element at or above `el`, or null
 function findVerseElement(el) {
   for (let i = 0; i < 6; i++) {
     if (!el) break;
@@ -23,199 +25,227 @@ function findVerseElement(el) {
   return null;
 }
 
-// Use event delegation to handle dynamically loaded verse links
-// Option/Alt+click or Ctrl+click → open Add Heading modal
+// Extract an OSIS verse reference from a verse element
+function extractReference(element) {
+  // Method 1: name attribute (e.g. name="Gen.1.1")
+  let ref = element.getAttribute('name');
+
+  // Method 2: data-verse attribute
+  if (!ref) ref = element.getAttribute('data-verse');
+
+  // Method 3: data-ref attribute
+  if (!ref) ref = element.getAttribute('data-ref');
+
+  // Method 4: id attribute that looks like an OSIS ref
+  if (!ref) {
+    const id = element.getAttribute('id');
+    if (id && /^\w+\.\d+\.\d+$/.test(id)) ref = id;
+  }
+
+  // Method 5: numeric text content + current chapter context
+  if (!ref) {
+    const verseNum = element.textContent.trim();
+    const context = getCurrentContext();
+    if (context && /^\d+$/.test(verseNum)) {
+      ref = `${context.book}.${context.chapter}.${verseNum}`;
+    }
+  }
+
+  return ref || null;
+}
+
+// ── Floating "+ Heading" button ──────────────────────────────────────────────
+
+(function injectFloatingButton() {
+  const style = document.createElement('style');
+  style.textContent = `
+    #bible-outline-float-btn {
+      position: fixed;
+      z-index: 2147483647;
+      display: none;
+      padding: 3px 9px;
+      background: #7B3410;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      line-height: 1.5;
+      pointer-events: auto;
+      transition: background 0.15s;
+    }
+    #bible-outline-float-btn:hover { background: #5C2008; }
+    #bible-outline-float-btn::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 10px;
+      border: 5px solid transparent;
+      border-top-color: #7B3410;
+    }
+  `;
+  document.head.appendChild(style);
+
+  const btn = document.createElement('button');
+  btn.id = 'bible-outline-float-btn';
+  btn.textContent = '+ Heading';
+  document.body.appendChild(btn);
+
+  let hideTimer = null;
+
+  function showBtn(verseEl, reference) {
+    clearTimeout(hideTimer);
+    btn.dataset.ref = reference;
+
+    const rect = verseEl.getBoundingClientRect();
+    const ARROW  = 5;   // ::after arrow height
+    const HEIGHT = 26;  // approximate button height
+    const GAP    = 4;
+
+    let top = rect.top - HEIGHT - ARROW - GAP;
+    if (top < 4) top = rect.bottom + GAP; // flip below if too close to top
+
+    btn.style.left = `${Math.max(4, rect.left)}px`;
+    btn.style.top  = `${top}px`;
+    btn.style.display = 'block';
+  }
+
+  function scheduleHide() {
+    hideTimer = setTimeout(() => { btn.style.display = 'none'; }, 400);
+  }
+
+  // Show on hover over any verse element
+  document.addEventListener('mouseover', function(e) {
+    const verseEl = findVerseElement(e.target);
+    if (!verseEl) return;
+    const ref = extractReference(verseEl);
+    if (ref) showBtn(verseEl, ref);
+  }, true);
+
+  // Hide when mouse leaves a verse element (with delay so button is reachable)
+  document.addEventListener('mouseout', function(e) {
+    if (findVerseElement(e.target)) scheduleHide();
+  }, true);
+
+  // Keep visible while hovering the button itself
+  btn.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  btn.addEventListener('mouseleave', scheduleHide);
+
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const ref = btn.dataset.ref;
+    if (ref) {
+      createHeadingFromVerse(ref);
+      btn.style.display = 'none';
+    }
+  });
+})();
+
+// ── Click handling ───────────────────────────────────────────────────────────
+
+// Alt/Option+click or Ctrl+click → open Add Heading modal
 // Plain click → highlight heading in side panel
 document.addEventListener('click', function(e) {
   const verseEl = findVerseElement(e.target);
   if (verseEl) handleVerseClick(verseEl, e);
-}, true); // Use capture phase to catch events early
+}, true);
 
-// Handle verse link click
 function handleVerseClick(element, event) {
-  console.log('Verse clicked:', element);
-  
-  // Try multiple ways to get the verse reference
-  let reference = null;
-  
-  // Method 1: name attribute (e.g., name="Gen.1.1")
-  reference = element.getAttribute('name');
-  
-  // Method 2: data-verse attribute
-  if (!reference) {
-    reference = element.getAttribute('data-verse');
-  }
-  
-  // Method 3: id attribute
-  if (!reference) {
-    const id = element.getAttribute('id');
-    if (id && id.includes('.')) {
-      reference = id;
-    }
-  }
-  
-  // Method 4: Parse from text content (e.g., "1", "2", etc. with context)
-  if (!reference) {
-    const verseNum = element.textContent.trim();
-    const context = getCurrentContext();
-    if (context && verseNum.match(/^\d+$/)) {
-      reference = `${context.book}.${context.chapter}.${verseNum}`;
-    }
-  }
-  
-  console.log('Extracted reference:', reference);
-  
-  if (!reference) {
-    console.log('Could not extract verse reference');
-    return;
-  }
-  
-  // Alt/Option+click or Ctrl+click → open Add Heading modal
+  const reference = extractReference(element);
+  if (!reference) return;
+
   if (event.altKey || event.ctrlKey) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('Creating heading from verse:', reference);
     createHeadingFromVerse(reference);
   } else {
-    // Regular click - just notify side panel
-    console.log('Notifying side panel of verse click:', reference);
-    chrome.runtime.sendMessage({
-      type: 'VERSE_CLICKED',
-      reference: reference
-    });
+    chrome.runtime.sendMessage({ type: 'VERSE_CLICKED', reference });
   }
 }
 
+// ── Page utilities ───────────────────────────────────────────────────────────
 
-// Get current book and chapter from page context
 function getCurrentContext() {
-  // Try to extract from URL
   const url = window.location.href;
   const match = url.match(/reference=([^&]+)/);
-  
   if (match) {
     const ref = decodeURIComponent(match[1]);
     const parts = ref.split('.');
-    if (parts.length >= 2) {
-      return {
-        book: parts[0],
-        chapter: parts[1]
-      };
-    }
+    if (parts.length >= 2) return { book: parts[0], chapter: parts[1] };
   }
-  
-  // Try to find from page content
+
   const headings = document.querySelectorAll('h1, h2, .chapterHeading, .passageReference');
   for (const heading of headings) {
-    const text = heading.textContent;
-    const match = text.match(/([1-3]?\s*[A-Za-z]+)\s+(\d+)/);
-    if (match) {
-      return {
-        book: match[1].replace(/\s/g, ''),
-        chapter: match[2]
-      };
-    }
+    const m = heading.textContent.match(/([1-3]?\s*[A-Za-z]+)\s+(\d+)/);
+    if (m) return { book: m[1].replace(/\s/g, ''), chapter: m[2] };
   }
-  
+
   return null;
 }
 
-// Create heading from verse reference
+function getCurrentBook() {
+  const url = window.location.href;
+  const match = url.match(/reference=([^&.]+)/);
+  if (match) return decodeURIComponent(match[1]);
+  const context = getCurrentContext();
+  return context ? context.book : null;
+}
+
 function createHeadingFromVerse(reference) {
-  console.log('Sending CREATE_HEADING_FROM_VERSE message:', reference);
-  
-  // Send message to background script
-  chrome.runtime.sendMessage({
-    type: 'CREATE_HEADING_FROM_VERSE',
-    reference: reference
-  });
-  
-  // Visual feedback
-  const link = document.querySelector(`[name="${reference}"], [data-verse="${reference}"], #${reference}`);
+  chrome.runtime.sendMessage({ type: 'CREATE_HEADING_FROM_VERSE', reference });
+
+  // Brief highlight on the verse element as visual feedback
+  const link = document.querySelector(
+    `[name="${reference}"], [data-verse="${reference}"], #${reference}`
+  );
   if (link) {
-    link.style.backgroundColor = '#c8e6c9';
+    link.style.backgroundColor = '#f5e6d0';
     link.style.transition = 'background-color 0.3s';
-    setTimeout(() => {
-      link.style.backgroundColor = '';
-    }, 1000);
+    setTimeout(() => { link.style.backgroundColor = ''; }, 1000);
   }
 }
 
-// Scroll to specific verse
 function scrollToVerse(reference) {
-  console.log('Scrolling to verse:', reference);
-  
-  // Try multiple selectors
   const selectors = [
     `[name="${reference}"]`,
     `[data-verse="${reference}"]`,
     `#${reference}`,
     `.verse[data-verse="${reference}"]`
   ];
-  
+
   let verseLink = null;
   for (const selector of selectors) {
     verseLink = document.querySelector(selector);
     if (verseLink) break;
   }
-  
+
   if (verseLink) {
-    console.log('Found verse element, scrolling...');
     verseLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
-    // Highlight the verse temporarily
-    verseLink.style.backgroundColor = '#ffeb3b';
+    verseLink.style.backgroundColor = '#f5e6d0';
     verseLink.style.transition = 'background-color 0.5s';
-    setTimeout(() => {
-      verseLink.style.backgroundColor = '';
-    }, 2000);
-  } else {
-    console.log('Verse element not found, selectors tried:', selectors);
+    setTimeout(() => { verseLink.style.backgroundColor = ''; }, 2000);
   }
 }
 
-// Get current book from URL or page
-function getCurrentBook() {
-  // Try to extract from URL
-  const url = window.location.href;
-  const match = url.match(/reference=([^&.]+)/);
-  
-  if (match) {
-    return decodeURIComponent(match[1]);
-  }
-  
-  // Try to get from context
-  const context = getCurrentContext();
-  return context ? context.book : null;
-}
+// ── Message listener ─────────────────────────────────────────────────────────
 
-// Listen for messages from background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('Content script received message:', message);
-  
   if (message.type === 'SCROLL_TO_VERSE') {
     scrollToVerse(message.reference);
     sendResponse({ success: true });
   } else if (message.type === 'GET_CURRENT_BOOK') {
-    const book = getCurrentBook();
-    console.log('Current book:', book);
-    sendResponse({ book: book });
+    sendResponse({ book: getCurrentBook() });
   }
   return true;
 });
 
-// Log when page changes
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('StepBible page loaded, Bible Outline Builder ready');
-    console.log('Current book:', getCurrentBook());
-  });
-} else {
-  console.log('StepBible page already loaded, Bible Outline Builder ready');
-  console.log('Current book:', getCurrentBook());
-}
+// ── URL change watcher ───────────────────────────────────────────────────────
 
-// Watch for URL changes (for single-page navigation)
 let lastUrl = location.href;
 new MutationObserver(() => {
   const url = location.href;
@@ -224,4 +254,3 @@ new MutationObserver(() => {
     console.log('URL changed, new book:', getCurrentBook());
   }
 }).observe(document, { subtree: true, childList: true });
-
