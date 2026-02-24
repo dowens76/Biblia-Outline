@@ -182,7 +182,8 @@ function handleVerseClick(element, event) {
     event.stopPropagation();
     createHeadingFromVerse(reference);
   } else {
-    chrome.runtime.sendMessage({ type: 'VERSE_CLICKED', reference });
+    chrome.runtime.sendMessage({ type: 'HIGHLIGHT_HEADING', reference })
+      .catch(() => {});
   }
 }
 
@@ -215,7 +216,10 @@ function getCurrentBook() {
 }
 
 function createHeadingFromVerse(reference) {
-  chrome.runtime.sendMessage({ type: 'CREATE_HEADING_FROM_VERSE', reference });
+  // Send directly to the side panel — skips the background relay which is
+  // unreliable in MV3 service workers (re-broadcast from onMessage can fail).
+  chrome.runtime.sendMessage({ type: 'OPEN_HEADING_MODAL_WITH_VERSE', reference })
+    .catch(() => {}); // suppress "no receivers" error if side panel is closed
 
   // Brief highlight on the verse element as visual feedback
   const link = document.querySelector(

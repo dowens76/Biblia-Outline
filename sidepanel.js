@@ -150,7 +150,8 @@ async function loadHeadings() {
   try {
     const books = getBooksToLoad(currentBook);
     currentHeadings = await db.getHeadingsByBooks(books);
-    const headingsWithRanges = db.calculateVerseRanges(currentHeadings);
+    const fallbackEndRef = db.getLastVerseRef(books[books.length - 1]);
+    const headingsWithRanges = db.calculateVerseRanges(currentHeadings, fallbackEndRef);
     renderHeadings(headingsWithRanges);
   } catch (error) {
     console.error('Error loading headings:', error);
@@ -170,8 +171,12 @@ function renderHeadings(headings) {
   
   emptyState.style.display = 'none';
   container.innerHTML = '';
-  
-  headings.forEach(heading => {
+
+  // Assign outline numbers (counters reset per book)
+  const numberedHeadings = assignOutlineNumbers(groupHeadingsByBook(headings))
+    .flatMap(g => g.headings);
+
+  numberedHeadings.forEach(heading => {
     const item = createHeadingElement(heading);
     container.appendChild(item);
   });
@@ -195,7 +200,7 @@ function createHeadingElement(heading) {
     ` – ${fmtRef(heading.endRef)}` : '';
   
   div.innerHTML = `
-    <span class="heading-text">${heading.text}</span>
+    <span class="heading-text"><span class="outline-num">${heading.prefix || ''}</span> ${heading.text}</span>
     <span class="heading-reference">(${startDisplay}${endDisplay})</span>
     <div class="heading-actions">
       <button class="action-btn edit" title="Edit">✏️</button>
@@ -288,14 +293,15 @@ function openAddHeadingModal() {
   }
   document.getElementById('chapterInput').value = '1';
   document.getElementById('verseInput').value = '1';
+  document.getElementById('midVerseCheck').checked = false;
   document.getElementById('headingText').value = '';
-  
+
   // Reset level selection
   document.querySelectorAll('.level-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.level === '1');
   });
   selectedHeadingLevel = 1;
-  
+
   document.getElementById('headingModal').classList.add('active');
   document.getElementById('headingText').focus();
 }
@@ -304,25 +310,21 @@ function openAddHeadingModal() {
 function openAddHeadingModalWithVerse(reference) {
   editingHeadingId = null;
   document.getElementById('modalTitle').textContent = 'Add Heading';
-  
-  // Parse the reference (format: "Book.Chapter.Verse")
-  const parts = reference.split('.');
-  const book = parts[0];
-  const chapter = parts[1];
-  const verse = parts[2];
-  
-  // Set the form values
+
+  const { book, chapter, verse } = db.parseReference(reference);
+
   document.getElementById('bookSelect').value = book;
   document.getElementById('chapterInput').value = chapter;
   document.getElementById('verseInput').value = verse;
+  document.getElementById('midVerseCheck').checked = false;
   document.getElementById('headingText').value = '';
-  
+
   // Reset level selection
   document.querySelectorAll('.level-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.level === '1');
   });
   selectedHeadingLevel = 1;
-  
+
   document.getElementById('headingModal').classList.add('active');
   document.getElementById('headingText').focus();
 }
@@ -333,11 +335,12 @@ function openEditHeadingModal(heading) {
   document.getElementById('modalTitle').textContent = 'Edit Heading';
   
   // Parse reference
-  const { book, chapter, verse } = db.parseReference(heading.reference);
-  
+  const { book, chapter, verse, midVerse } = db.parseReference(heading.reference);
+
   document.getElementById('bookSelect').value = book;
   document.getElementById('chapterInput').value = chapter;
   document.getElementById('verseInput').value = verse;
+  document.getElementById('midVerseCheck').checked = midVerse;
   document.getElementById('headingText').value = heading.text;
   
   // Set level
@@ -361,16 +364,17 @@ async function saveHeading() {
   const book = document.getElementById('bookSelect').value;
   const chapter = document.getElementById('chapterInput').value;
   const verse = document.getElementById('verseInput').value;
+  const midVerse = document.getElementById('midVerseCheck').checked;
   const text = document.getElementById('headingText').value.trim();
-  
-  console.log('Save heading called:', { book, chapter, verse, text, level: selectedHeadingLevel });
-  
+
+  console.log('Save heading called:', { book, chapter, verse, midVerse, text, level: selectedHeadingLevel });
+
   if (!book || !chapter || !verse || !text) {
     alert('Please fill in all fields');
     return;
   }
-  
-  const reference = `${book}.${chapter}.${verse}`;
+
+  const reference = `${book}.${chapter}.${verse}${midVerse ? 'b' : ''}`;
   console.log('Reference:', reference);
   
   try {
@@ -457,7 +461,17 @@ async function exportOutline(format) {
       rawHeadings = await db.getAllHeadings();
     }
 
-    const headingsWithRanges = db.calculateVerseRanges(rawHeadings);
+    // Determine the last verse of the scope so unclosed ranges extend correctly
+    let fallbackEndRef = null;
+    if (scope === 'current' && currentBook) {
+      const books = getBooksToLoad(currentBook);
+      fallbackEndRef = db.getLastVerseRef(books[books.length - 1]);
+    } else if (rawHeadings.length > 0) {
+      const lastBook = rawHeadings[rawHeadings.length - 1].book;
+      const lastGroupBooks = getBooksToLoad(lastBook);
+      fallbackEndRef = db.getLastVerseRef(lastGroupBooks[lastGroupBooks.length - 1]);
+    }
+    const headingsWithRanges = db.calculateVerseRanges(rawHeadings, fallbackEndRef);
     console.log('Headings with ranges:', headingsWithRanges);
     
     let content;

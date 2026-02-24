@@ -220,6 +220,13 @@ body {
   font-size: 15px;
 }
 
+.outline-num {
+  color: #A0522D;
+  font-weight: 700;
+  margin-right: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
 .heading-reference {
   font-size: 12px;
   color: #666;
@@ -402,6 +409,30 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+
+/* Mid-verse checkbox */
+.check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+}
+
+.check-label input[type="checkbox"] {
+  accent-color: #7B3410;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.check-hint {
+  font-weight: 400;
+  color: #999;
 }
 
 /* Level Buttons */

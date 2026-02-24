@@ -83,20 +83,27 @@ function getPreviousVerse(reference) {
   const parts = reference.split('.');
   const book = parts[0];
   let chapter = parseInt(parts[1]);
-  let verse = parseInt(parts[2]);
-  
+  const verseRaw = parts[2] || '1';
+  const midVerse = verseRaw.endsWith('b');
+  let verse = parseInt(verseRaw);
+
+  // If midverse, "previous" is the start (a-part) of the same verse
+  if (midVerse) {
+    return `${book}.${chapter}.${verse}`;
+  }
+
   // If not first verse, just go back one verse
   if (verse > 1) {
     return `${book}.${chapter}.${verse - 1}`;
   }
-  
+
   // If first verse of chapter, go to last verse of previous chapter
   if (chapter > 1) {
     const prevChapter = chapter - 1;
     const lastVerse = getLastVerse(book, prevChapter);
     return `${book}.${prevChapter}.${lastVerse}`;
   }
-  
+
   // First verse of first chapter - no previous
   return reference;
 }
@@ -147,22 +154,25 @@ class BibleOutlineDB {
     });
   }
 
-  // Parse reference like "Gen.1.1" into components
+  // Parse reference like "Gen.1.1" or "Gen.1.1b" into components
   parseReference(reference) {
     const parts = reference.split('.');
+    const verseRaw = parts[2] || '1';
     return {
       book: parts[0],
       chapter: parseInt(parts[1]),
-      verse: parseInt(parts[2])
+      verse: parseInt(verseRaw),
+      midVerse: verseRaw.endsWith('b')
     };
   }
 
   // Create a sort key for ordering headings
+  // "Gen.1.1b" sorts after "Gen.1.1" and before "Gen.1.2"
   createSortKey(reference) {
-    const { book, chapter, verse } = this.parseReference(reference);
-    // Create a sortable string: book code + padded chapter + padded verse
+    const { book, chapter, verse, midVerse } = this.parseReference(reference);
     const bookOrder = this.getBookOrder(book);
-    return `${bookOrder.toString().padStart(3, '0')}.${chapter.toString().padStart(3, '0')}.${verse.toString().padStart(3, '0')}`;
+    const key = `${bookOrder.toString().padStart(3, '0')}.${chapter.toString().padStart(3, '0')}.${verse.toString().padStart(3, '0')}`;
+    return midVerse ? key + 'b' : key;
   }
 
   // Get canonical order of book
@@ -294,31 +304,41 @@ class BibleOutlineDB {
     });
   }
 
-  // Calculate verse ranges based on heading hierarchy
-  calculateVerseRanges(headings) {
+  // Return the OSIS reference of the last verse in a book, e.g. "2Sam.24.25"
+  getLastVerseRef(bookCode) {
+    const chapters = verseCountData[bookCode];
+    if (!chapters) return null;
+    const lastChapter = chapters.length;
+    const lastVerse = chapters[lastChapter - 1];
+    return `${bookCode}.${lastChapter}.${lastVerse}`;
+  }
+
+  // Calculate verse ranges based on heading hierarchy.
+  // fallbackEndRef: used when no subsequent same-or-higher-level heading exists
+  // (e.g. the last verse of the last book in the current view).
+  calculateVerseRanges(headings, fallbackEndRef = null) {
     const result = [];
-    
+
     for (let i = 0; i < headings.length; i++) {
       const current = headings[i];
       const startRef = current.reference;
-      
+
       // Find next heading of same or higher level
       let endRef = null;
       for (let j = i + 1; j < headings.length; j++) {
         if (headings[j].level <= current.level) {
-          // Get previous verse using the verse-counts.js function
           endRef = getPreviousVerse(headings[j].reference);
           break;
         }
       }
-      
-      result.push({
-        ...current,
-        startRef,
-        endRef: endRef || startRef // If no end found, use start
-      });
+
+      if (!endRef) {
+        endRef = fallbackEndRef || startRef;
+      }
+
+      result.push({ ...current, startRef, endRef });
     }
-    
+
     return result;
   }
 

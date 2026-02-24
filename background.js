@@ -7,19 +7,7 @@ chrome.action.onClicked.addListener((tab) => {
 
 // Listen for messages from content script and side panel
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'VERSE_CLICKED') {
-    // Forward verse click from content script to side panel
-    chrome.runtime.sendMessage({
-      type: 'HIGHLIGHT_HEADING',
-      reference: message.reference
-    });
-  } else if (message.type === 'CREATE_HEADING_FROM_VERSE') {
-    // Forward to side panel to open the Add Heading modal
-    chrome.runtime.sendMessage({
-      type: 'OPEN_HEADING_MODAL_WITH_VERSE',
-      reference: message.reference
-    });
-  } else if (message.type === 'NAVIGATE_TO_VERSE') {
+  if (message.type === 'NAVIGATE_TO_VERSE') {
     // Navigate StepBible to specific verse
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
