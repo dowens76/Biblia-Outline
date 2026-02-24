@@ -71,6 +71,16 @@ function setupEventListeners() {
     await loadHeadings();
   });
 
+  // Go-to-book button
+  document.getElementById('goToBookBtn').addEventListener('click', async () => {
+    if (!currentBook) return;
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tabs[0]) {
+      const url = `https://www.stepbible.org/?q=version=ESV|reference=${currentBook}.1&options=NVHUG`;
+      await chrome.tabs.update(tabs[0].id, { url });
+    }
+  });
+
   // Click outside modal to close
   document.getElementById('headingModal').addEventListener('click', (e) => {
     if (e.target.id === 'headingModal') closeModal();
