@@ -897,22 +897,24 @@ function makeZip(files) {
 function generateDocxExport(headings) {
   const x = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-  // level → { Word styleId, hex color, font size in half-points, left indent in twips }
-  const LVLS = {
-    1: { id:'Heading1', color:'5C2008', sz:40, ind:0    },
-    2: { id:'Heading2', color:'7B3410', sz:32, ind:300  },
-    3: { id:'Heading3', color:'A0522D', sz:28, ind:600  },
-    4: { id:'Heading4', color:'C07840', sz:26, ind:900  },
-    5: { id:'Heading5', color:'9E7B50', sz:24, ind:1200 },
-    6: { id:'Heading6', color:'8B8AA0', sz:22, ind:1500 },
-  };
+  // Heading styles: use Word's built-in heading style names so the Navigation
+  // pane and TOC features work. w:qFormat surfaces them in the Quick Styles gallery.
+  const H = [
+    { ilvl:0, id:'Heading1', name:'heading 1', color:'5C2008', sz:40 },
+    { ilvl:1, id:'Heading2', name:'heading 2', color:'7B3410', sz:32 },
+    { ilvl:2, id:'Heading3', name:'heading 3', color:'A0522D', sz:28 },
+    { ilvl:3, id:'Heading4', name:'heading 4', color:'C07840', sz:26 },
+    { ilvl:4, id:'Heading5', name:'heading 5', color:'9E7B50', sz:24 },
+    { ilvl:5, id:'Heading6', name:'heading 6', color:'8B8AA0', sz:22 },
+  ];
 
   const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
   <Default Extension="xml"  ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-  <Override PartName="/word/styles.xml"   ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+  <Override PartName="/word/document.xml"  ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml"    ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+  <Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>
 </Types>`;
 
   const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -922,7 +924,8 @@ function generateDocxExport(headings) {
 
   const docRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"    Target="styles.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>
 </Relationships>`;
 
   const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -931,8 +934,12 @@ function generateDocxExport(headings) {
     <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
     <w:sz w:val="22"/>
   </w:rPr></w:rPrDefault></w:docDefaults>
+  <w:style w:type="paragraph" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+  </w:style>
   <w:style w:type="paragraph" w:styleId="BookTitle">
     <w:name w:val="Book Title"/>
+    <w:basedOn w:val="Normal"/>
     <w:pPr><w:spacing w:before="480" w:after="120"/><w:jc w:val="left"/></w:pPr>
     <w:rPr>
       <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
@@ -940,43 +947,77 @@ function generateDocxExport(headings) {
       <w:color w:val="5C2008"/>
     </w:rPr>
   </w:style>
-${Object.entries(LVLS).map(([lvl, L]) =>
-`  <w:style w:type="paragraph" w:styleId="${L.id}">
-    <w:name w:val="heading ${lvl}"/>
-    <w:pPr>
-      <w:outlineLvl w:val="${lvl - 1}"/>
-      ${L.ind ? `<w:ind w:left="${L.ind}"/>` : ''}
-    </w:pPr>
+${H.map(h =>
+`  <w:style w:type="paragraph" w:styleId="${h.id}">
+    <w:name w:val="${h.name}"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:outlineLvl w:val="${h.ilvl}"/></w:pPr>
     <w:rPr>
       <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
-      <w:b/><w:sz w:val="${L.sz}"/>
-      <w:color w:val="${L.color}"/>
+      <w:b/><w:sz w:val="${h.sz}"/>
+      <w:color w:val="${h.color}"/>
     </w:rPr>
   </w:style>`).join('\n')}
 </w:styles>`;
 
-  const groups = assignOutlineNumbers(groupHeadingsByBook(headings));
+  // Multilevel outline list: I. / A. / 1. / a. / (1) / (a)
+  // One w:num per book group so counters restart for each book.
+  const NUM_LVLS = [
+    { fmt:'upperRoman',  text:'%1.',  left:360,  hang:360 },
+    { fmt:'upperLetter', text:'%2.',  left:720,  hang:360 },
+    { fmt:'decimal',     text:'%3.',  left:1080, hang:360 },
+    { fmt:'lowerLetter', text:'%4.',  left:1440, hang:360 },
+    { fmt:'decimal',     text:'(%5)', left:1800, hang:480 },
+    { fmt:'lowerLetter', text:'(%6)', left:2160, hang:480 },
+  ];
+
+  const groups = groupHeadingsByBook(headings);
+
+  const numberingXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:abstractNum w:abstractNumId="0">
+    <w:multiLevelType w:val="multilevel"/>
+${NUM_LVLS.map((l, i) =>
+`    <w:lvl w:ilvl="${i}">
+      <w:start w:val="1"/>
+      <w:numFmt w:val="${l.fmt}"/>
+      <w:lvlText w:val="${l.text}"/>
+      <w:lvlJc w:val="left"/>
+      <w:pPr><w:ind w:left="${l.left}" w:hanging="${l.hang}"/></w:pPr>
+    </w:lvl>`).join('\n')}
+  </w:abstractNum>
+${groups.map((_, i) =>
+`  <w:num w:numId="${i + 1}">
+    <w:abstractNumId w:val="0"/>
+  </w:num>`).join('\n')}
+</w:numbering>`;
+
   let paragraphs = `  <w:p>
     <w:pPr><w:pStyle w:val="BookTitle"/></w:pPr>
     <w:r><w:t>Bible Outline</w:t></w:r>
   </w:p>\n`;
 
-  for (const group of groups) {
+  groups.forEach((group, gi) => {
+    const numId = gi + 1;
     paragraphs += `  <w:p>
     <w:pPr><w:pStyle w:val="BookTitle"/></w:pPr>
     <w:r><w:t>${x(group.bookName)}</w:t></w:r>
   </w:p>\n`;
     for (const h of group.headings) {
-      const L = LVLS[h.level] || LVLS[1];
       const ref = h.endRef !== h.startRef
         ? `${db.formatReference(h.startRef)}\u2013${db.formatReference(h.endRef)}`
         : db.formatReference(h.startRef);
       paragraphs += `  <w:p>
-    <w:pPr><w:pStyle w:val="${L.id}"/></w:pPr>
-    <w:r><w:t xml:space="preserve">${x(h.prefix)} ${x(h.text)} (${ref})</w:t></w:r>
+    <w:pPr>
+      <w:pStyle w:val="${H[h.level - 1].id}"/>
+      <w:numPr><w:ilvl w:val="${h.level - 1}"/><w:numId w:val="${numId}"/></w:numPr>
+    </w:pPr>
+    <w:r><w:t xml:space="preserve">${x(h.text)} (${ref})</w:t></w:r>
   </w:p>\n`;
     }
-  }
+  });
 
   const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
@@ -989,11 +1030,12 @@ ${paragraphs}    <w:sectPr>
 </w:document>`;
 
   return makeZip([
-    { name: '[Content_Types].xml',          data: contentTypes },
-    { name: '_rels/.rels',                  data: rels         },
-    { name: 'word/_rels/document.xml.rels', data: docRels      },
-    { name: 'word/styles.xml',              data: stylesXml    },
-    { name: 'word/document.xml',            data: documentXml  },
+    { name: '[Content_Types].xml',          data: contentTypes  },
+    { name: '_rels/.rels',                  data: rels          },
+    { name: 'word/_rels/document.xml.rels', data: docRels       },
+    { name: 'word/styles.xml',              data: stylesXml     },
+    { name: 'word/numbering.xml',           data: numberingXml  },
+    { name: 'word/document.xml',            data: documentXml   },
   ]);
 }
 
@@ -1003,30 +1045,62 @@ function generateOdtExport(headings) {
 
   const mimetype = 'application/vnd.oasis.opendocument.text';
 
+  // manifest lists all parts, including styles.xml which holds the outline-style
   const manifest = `<?xml version="1.0" encoding="UTF-8"?>
 <manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.3">
   <manifest:file-entry manifest:full-path="/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+  <manifest:file-entry manifest:full-path="styles.xml"  manifest:media-type="text/xml"/>
   <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
 </manifest:manifest>`;
 
-  // Explicit automatic styles — avoids relying on built-in style name lookups
-  const STYLES = [
-    { name:'P_BT', color:'#5C2008', size:'20pt', left:'0cm',   top:'18pt', bot:'8pt'  },
-    { name:'P_H1', color:'#5C2008', size:'16pt', left:'0cm',   top:'14pt', bot:'4pt'  },
-    { name:'P_H2', color:'#7B3410', size:'14pt', left:'0.5cm', top:'10pt', bot:'3pt'  },
-    { name:'P_H3', color:'#A0522D', size:'13pt', left:'1cm',   top:'8pt',  bot:'2pt'  },
-    { name:'P_H4', color:'#C07840', size:'12pt', left:'1.5cm', top:'6pt',  bot:'2pt'  },
-    { name:'P_H5', color:'#9E7B50', size:'11pt', left:'2cm',   top:'6pt',  bot:'2pt'  },
-    { name:'P_H6', color:'#8B8AA0', size:'10pt', left:'2.5cm', top:'6pt',  bot:'2pt'  },
+  // styles.xml: defines the document outline-style used by all text:h elements.
+  // The text:outline-style element must live in office:styles (not automatic-styles).
+  const ODT_LEVELS = [
+    { level:1, fmt:'I', prefix:'',  suffix:'.', before:'0cm',   width:'0.7cm' },
+    { level:2, fmt:'A', prefix:'',  suffix:'.', before:'0.7cm', width:'0.7cm' },
+    { level:3, fmt:'1', prefix:'',  suffix:'.', before:'1.4cm', width:'0.7cm' },
+    { level:4, fmt:'a', prefix:'',  suffix:'.', before:'2.1cm', width:'0.7cm' },
+    { level:5, fmt:'1', prefix:'(', suffix:')', before:'2.8cm', width:'0.9cm' },
+    { level:6, fmt:'a', prefix:'(', suffix:')', before:'3.7cm', width:'0.9cm' },
   ];
 
-  const autoStyles = STYLES.map(s =>
-`    <style:style style:name="${s.name}" style:family="paragraph">
-      <style:paragraph-properties fo:margin-left="${s.left}" fo:margin-top="${s.top}" fo:margin-bottom="${s.bot}" fo:keep-with-next="always"/>
-      <style:text-properties fo:font-size="${s.size}" fo:font-weight="bold" fo:color="${s.color}"/>
+  const stylesXml = `<?xml version="1.0" encoding="UTF-8"?>
+<office:document-styles
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  office:version="1.3">
+  <office:styles>
+    <text:outline-style style:name="Outline">
+${ODT_LEVELS.map(l => {
+  const pre = l.prefix ? ` style:num-prefix="${l.prefix}"` : '';
+  return `      <text:outline-level-style text:level="${l.level}" style:num-format="${l.fmt}"${pre} style:num-suffix="${l.suffix}">
+        <style:list-level-properties text:space-before="${l.before}" text:min-label-width="${l.width}"/>
+      </text:outline-level-style>`;
+}).join('\n')}
+    </text:outline-style>
+  </office:styles>
+</office:document-styles>`;
+
+  // Automatic styles in content.xml inherit from the built-in "Heading N" styles
+  // so headings participate in the Navigator and Table of Contents.
+  // Only color and size are overridden; spacing/indentation comes from the outline-style.
+  const H_COLOR = ['#5C2008','#7B3410','#A0522D','#C07840','#9E7B50','#8B8AA0'];
+  const H_SIZE  = ['16pt',   '14pt',   '13pt',   '12pt',   '11pt',   '10pt'  ];
+
+  const autoStyles = H_COLOR.map((color, i) =>
+`    <style:style style:name="H${i+1}" style:family="paragraph" style:parent-style-name="Heading ${i+1}">
+      <style:text-properties fo:color="${color}" fo:font-size="${H_SIZE[i]}" fo:font-weight="bold"/>
     </style:style>`).join('\n');
 
-  const groups = assignOutlineNumbers(groupHeadingsByBook(headings));
+  const pBtStyle =
+`    <style:style style:name="P_BT" style:family="paragraph">
+      <style:paragraph-properties fo:margin-top="18pt" fo:margin-bottom="8pt"/>
+      <style:text-properties fo:font-size="20pt" fo:font-weight="bold" fo:color="#5C2008"/>
+    </style:style>`;
+
+  const groups = groupHeadingsByBook(headings);
   let body = `    <text:p text:style-name="P_BT">Bible Outline</text:p>\n`;
   for (const group of groups) {
     body += `    <text:p text:style-name="P_BT">${x(group.bookName)}</text:p>\n`;
@@ -1034,7 +1108,8 @@ function generateOdtExport(headings) {
       const ref = h.endRef !== h.startRef
         ? `${db.formatReference(h.startRef)}\u2013${db.formatReference(h.endRef)}`
         : db.formatReference(h.startRef);
-      body += `    <text:p text:style-name="P_H${h.level}">${x(h.prefix)} ${x(h.text)} (${ref})</text:p>\n`;
+      // text:h + text:outline-level picks up the outline-style numbering automatically
+      body += `    <text:h text:outline-level="${h.level}" text:style-name="H${h.level}">${x(h.text)} (${ref})</text:h>\n`;
     }
   }
 
@@ -1047,6 +1122,7 @@ function generateOdtExport(headings) {
   office:version="1.3">
   <office:automatic-styles>
 ${autoStyles}
+${pBtStyle}
   </office:automatic-styles>
   <office:body>
     <office:text>
@@ -1056,9 +1132,10 @@ ${body}    </office:text>
 
   // mimetype MUST be the first ZIP entry, stored uncompressed (ODF spec requirement)
   return makeZip([
-    { name: 'mimetype',              data: mimetype },
-    { name: 'META-INF/manifest.xml', data: manifest },
-    { name: 'content.xml',           data: content  },
+    { name: 'mimetype',              data: mimetype  },
+    { name: 'META-INF/manifest.xml', data: manifest  },
+    { name: 'styles.xml',            data: stylesXml },
+    { name: 'content.xml',           data: content   },
   ]);
 }
 
