@@ -99,6 +99,13 @@ function setupEventListeners() {
   });
 
   // Click outside modal to close
+  document.getElementById('headingText').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && document.getElementById('headingText').value.trim()) {
+      e.preventDefault();
+      saveHeading();
+    }
+  });
+
   document.getElementById('headingModal').addEventListener('click', (e) => {
     if (e.target.id === 'headingModal') closeModal();
   });
@@ -505,7 +512,7 @@ async function exportOutline(format) {
 
 // Generate HTML export
 function generateHTMLExport(headings) {
-  const groups = groupHeadingsByBook(headings);
+  const groups = assignOutlineNumbers(groupHeadingsByBook(headings));
 
   let html = `<!DOCTYPE html>
 <html lang="en">
@@ -518,6 +525,7 @@ function generateHTMLExport(headings) {
     .book-title { font-size: 1.5em; font-weight: 700; color: #5C2008; border-bottom: 3px solid #8B4513; padding-bottom: 8px; margin-top: 48px; }
     h1 { color: #5C2008; } h2 { color: #7B3410; } h3 { color: #A0522D; }
     h4 { color: #C07840; } h5 { color: #9E7B50; } h6 { color: #8B8AA0; }
+    .num { font-variant-numeric: tabular-nums; margin-right: 4px; }
     .reference { color: #999; font-size: 0.9em; font-family: monospace; }
   </style>
 </head>
@@ -531,8 +539,8 @@ function generateHTMLExport(headings) {
     for (const heading of group.headings) {
       const startDisplay = db.formatReference(heading.startRef);
       const endDisplay = heading.endRef !== heading.startRef ?
-        `–${db.formatReference(heading.endRef)}` : '';
-      html += `  <h${heading.level}>${heading.text} <span class="reference">(${startDisplay}${endDisplay})</span></h${heading.level}>\n`;
+        `\u2013${db.formatReference(heading.endRef)}` : '';
+      html += `  <h${heading.level}><span class="num">${heading.prefix}</span> ${heading.text} <span class="reference">(${startDisplay}${endDisplay})</span></h${heading.level}>\n`;
     }
   }
 
@@ -583,6 +591,45 @@ function generateJSONExport(headings) {
     }))
   }));
   return JSON.stringify(data, null, 2);
+}
+
+// ── Traditional outline numbering ────────────────────────────────────────────
+
+function toRoman(n) {
+  const vals = [1000,900,500,400,100,90,50,40,10,9,5,4,1];
+  const syms = ['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I'];
+  let r = '';
+  for (let i = 0; i < vals.length; i++) {
+    while (n >= vals[i]) { r += syms[i]; n -= vals[i]; }
+  }
+  return r;
+}
+
+function outlinePrefix(level, n) {
+  switch (level) {
+    case 1: return toRoman(n) + '.';
+    case 2: return String.fromCharCode(64 + n) + '.';        // A.
+    case 3: return n + '.';                                   // 1.
+    case 4: return String.fromCharCode(96 + n) + '.';        // a.
+    case 5: return '(' + n + ')';                             // (1)
+    case 6: return '(' + String.fromCharCode(96 + n) + ')';  // (a)
+    default: return n + '.';
+  }
+}
+
+// Returns a copy of groups with a .prefix string added to each heading.
+// Counters reset at the start of each book and when ascending levels.
+function assignOutlineNumbers(groups) {
+  return groups.map(group => {
+    const counters = [0, 0, 0, 0, 0, 0];
+    const headings = group.headings.map(h => {
+      const idx = h.level - 1;
+      counters[idx]++;
+      for (let i = idx + 1; i < 6; i++) counters[i] = 0;
+      return { ...h, prefix: outlinePrefix(h.level, counters[idx]) };
+    });
+    return { ...group, headings };
+  });
 }
 
 // ── CRC-32 (required by ZIP) ──────────────────────────────────────────────────
@@ -743,7 +790,7 @@ ${Object.entries(LVLS).map(([lvl, L]) =>
   </w:style>`).join('\n')}
 </w:styles>`;
 
-  const groups = groupHeadingsByBook(headings);
+  const groups = assignOutlineNumbers(groupHeadingsByBook(headings));
   let paragraphs = `  <w:p>
     <w:pPr><w:pStyle w:val="BookTitle"/></w:pPr>
     <w:r><w:t>Bible Outline</w:t></w:r>
@@ -761,7 +808,7 @@ ${Object.entries(LVLS).map(([lvl, L]) =>
         : db.formatReference(h.startRef);
       paragraphs += `  <w:p>
     <w:pPr><w:pStyle w:val="${L.id}"/></w:pPr>
-    <w:r><w:t xml:space="preserve">${x(h.text)} (${ref})</w:t></w:r>
+    <w:r><w:t xml:space="preserve">${x(h.prefix)} ${x(h.text)} (${ref})</w:t></w:r>
   </w:p>\n`;
     }
   }
@@ -793,19 +840,36 @@ function generateOdtExport(headings) {
 
   const manifest = `<?xml version="1.0" encoding="UTF-8"?>
 <manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.3">
-  <manifest:file-entry manifest:full-path="/"           manifest:media-type="application/vnd.oasis.opendocument.text"/>
+  <manifest:file-entry manifest:full-path="/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
   <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
 </manifest:manifest>`;
 
-  const odtGroups = groupHeadingsByBook(headings);
-  let textContent = `      <text:p text:style-name="Title">Bible Outline</text:p>\n`;
-  for (const group of odtGroups) {
-    textContent += `      <text:p text:style-name="Title">${x(group.bookName)}</text:p>\n`;
+  // Explicit automatic styles — avoids relying on built-in style name lookups
+  const STYLES = [
+    { name:'P_BT', color:'#5C2008', size:'20pt', left:'0cm',   top:'18pt', bot:'8pt'  },
+    { name:'P_H1', color:'#5C2008', size:'16pt', left:'0cm',   top:'14pt', bot:'4pt'  },
+    { name:'P_H2', color:'#7B3410', size:'14pt', left:'0.5cm', top:'10pt', bot:'3pt'  },
+    { name:'P_H3', color:'#A0522D', size:'13pt', left:'1cm',   top:'8pt',  bot:'2pt'  },
+    { name:'P_H4', color:'#C07840', size:'12pt', left:'1.5cm', top:'6pt',  bot:'2pt'  },
+    { name:'P_H5', color:'#9E7B50', size:'11pt', left:'2cm',   top:'6pt',  bot:'2pt'  },
+    { name:'P_H6', color:'#8B8AA0', size:'10pt', left:'2.5cm', top:'6pt',  bot:'2pt'  },
+  ];
+
+  const autoStyles = STYLES.map(s =>
+`    <style:style style:name="${s.name}" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="${s.left}" fo:margin-top="${s.top}" fo:margin-bottom="${s.bot}" fo:keep-with-next="always"/>
+      <style:text-properties fo:font-size="${s.size}" fo:font-weight="bold" fo:color="${s.color}"/>
+    </style:style>`).join('\n');
+
+  const groups = assignOutlineNumbers(groupHeadingsByBook(headings));
+  let body = `    <text:p text:style-name="P_BT">Bible Outline</text:p>\n`;
+  for (const group of groups) {
+    body += `    <text:p text:style-name="P_BT">${x(group.bookName)}</text:p>\n`;
     for (const h of group.headings) {
       const ref = h.endRef !== h.startRef
         ? `${db.formatReference(h.startRef)}\u2013${db.formatReference(h.endRef)}`
         : db.formatReference(h.startRef);
-      textContent += `      <text:h text:style-name="Heading ${h.level}" text:outline-level="${h.level}">${x(h.text)} (${ref})</text:h>\n`;
+      body += `    <text:p text:style-name="P_H${h.level}">${x(h.prefix)} ${x(h.text)} (${ref})</text:p>\n`;
     }
   }
 
@@ -813,14 +877,19 @@ function generateOdtExport(headings) {
 <office:document-content
   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
   office:version="1.3">
+  <office:automatic-styles>
+${autoStyles}
+  </office:automatic-styles>
   <office:body>
     <office:text>
-${textContent}    </office:text>
+${body}    </office:text>
   </office:body>
 </office:document-content>`;
 
-  // mimetype MUST be first entry and stored uncompressed per the ODF spec
+  // mimetype MUST be the first ZIP entry, stored uncompressed (ODF spec requirement)
   return makeZip([
     { name: 'mimetype',              data: mimetype },
     { name: 'META-INF/manifest.xml', data: manifest },
@@ -830,7 +899,7 @@ ${textContent}    </office:text>
 
 // Open a print-ready page in a new tab so the user can save as PDF
 async function exportAsPDF(headings) {
-  const groups = groupHeadingsByBook(headings);
+  const groups = assignOutlineNumbers(groupHeadingsByBook(headings));
   let body = '';
   for (const group of groups) {
     body += `<p class="book-title">${escapeXML(group.bookName)}</p>\n`;
@@ -838,7 +907,7 @@ async function exportAsPDF(headings) {
       const startDisplay = db.formatReference(heading.startRef);
       const endDisplay = heading.endRef !== heading.startRef ?
         `\u2013${db.formatReference(heading.endRef)}` : '';
-      body += `<h${heading.level}>${escapeXML(heading.text)} <span class="ref">(${startDisplay}${endDisplay})</span></h${heading.level}>\n`;
+      body += `<h${heading.level}><span class="num">${escapeXML(heading.prefix)}</span> ${escapeXML(heading.text)} <span class="ref">(${startDisplay}${endDisplay})</span></h${heading.level}>\n`;
     }
   }
 
@@ -853,6 +922,7 @@ async function exportAsPDF(headings) {
     h1  { font-size: 16pt; color: #5C2008; } h2 { font-size: 14pt; color: #7B3410; }
     h3  { font-size: 13pt; color: #A0522D; } h4 { font-size: 12pt; color: #C07840; }
     h5  { font-size: 11pt; color: #9E7B50; } h6 { font-size: 10pt; color: #8B8AA0; }
+    .num{ font-variant-numeric: tabular-nums; margin-right: 4px; }
     .ref{ color: #999; font-size: 0.82em; font-family: monospace; }
     @media print {
       body { margin: 0; max-width: none; }
