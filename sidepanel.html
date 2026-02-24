@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblia Outline</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">Biblia Outline</h1>
+      <div class="header-actions">
+        <button id="addHeadingBtn" class="btn btn-primary" title="Add New Heading">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1V15M1 8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add Heading
+        </button>
+        <button id="importBtn" class="btn btn-secondary" title="Import Outline">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M14 9v4c0 .5-.2 1-.6 1.4-.4.4-.9.6-1.4.6H4c-.5 0-1-.2-1.4-.6C2.2 14 2 13.5 2 13V9M11 5L8 2M8 2L5 5M8 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Import
+        </button>
+        <button id="exportBtn" class="btn btn-secondary" title="Export Outline">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M14 10V13C14 13.5304 13.7893 14.0391 13.4142 14.4142C13.0391 14.7893 12.5304 15 12 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V10M11 5L8 2M8 2L5 5M8 2V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Export
+        </button>
+      </div>
+    </header>
+
+    <!-- Current Book Display -->
+    <div class="current-book">
+      <span class="book-label">Current Book:</span>
+      <span id="currentBook" class="book-name">-</span>
+    </div>
+
+    <!-- Outline Container -->
+    <div id="outlineContainer" class="outline-container">
+      <div id="emptyState" class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <path d="M6 12H42M6 24H42M6 36H42" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <p>No headings yet</p>
+        <p class="empty-hint">Click "Add Heading" or click a verse at StepBible.org</p>
+      </div>
+      <div id="headingsList" class="headings-list"></div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Heading Modal -->
+  <div id="headingModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add Heading</h2>
+        <button id="closeModal" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Book Selection -->
+        <div class="form-group">
+          <label for="bookSelect">Book</label>
+          <select id="bookSelect" class="form-control">
+            <optgroup label="Old Testament">
+              <option value="Gen">Genesis</option>
+              <option value="Exod">Exodus</option>
+              <option value="Lev">Leviticus</option>
+              <option value="Num">Numbers</option>
+              <option value="Deut">Deuteronomy</option>
+              <option value="Josh">Joshua</option>
+              <option value="Judg">Judges</option>
+              <option value="Ruth">Ruth</option>
+              <option value="1Sam">1 Samuel</option>
+              <option value="2Sam">2 Samuel</option>
+              <option value="1Kgs">1 Kings</option>
+              <option value="2Kgs">2 Kings</option>
+              <option value="1Chr">1 Chronicles</option>
+              <option value="2Chr">2 Chronicles</option>
+              <option value="Ezra">Ezra</option>
+              <option value="Neh">Nehemiah</option>
+              <option value="Esth">Esther</option>
+              <option value="Job">Job</option>
+              <option value="Ps">Psalms</option>
+              <option value="Prov">Proverbs</option>
+              <option value="Eccl">Ecclesiastes</option>
+              <option value="Song">Song of Solomon</option>
+              <option value="Isa">Isaiah</option>
+              <option value="Jer">Jeremiah</option>
+              <option value="Lam">Lamentations</option>
+              <option value="Ezek">Ezekiel</option>
+              <option value="Dan">Daniel</option>
+              <option value="Hos">Hosea</option>
+              <option value="Joel">Joel</option>
+              <option value="Amos">Amos</option>
+              <option value="Obad">Obadiah</option>
+              <option value="Jonah">Jonah</option>
+              <option value="Mic">Micah</option>
+              <option value="Nah">Nahum</option>
+              <option value="Hab">Habakkuk</option>
+              <option value="Zeph">Zephaniah</option>
+              <option value="Hag">Haggai</option>
+              <option value="Zech">Zechariah</option>
+              <option value="Mal">Malachi</option>
+            </optgroup>
+            <optgroup label="New Testament">
+              <option value="Matt">Matthew</option>
+              <option value="Mark">Mark</option>
+              <option value="Luke">Luke</option>
+              <option value="John">John</option>
+              <option value="Acts">Acts</option>
+              <option value="Rom">Romans</option>
+              <option value="1Cor">1 Corinthians</option>
+              <option value="2Cor">2 Corinthians</option>
+              <option value="Gal">Galatians</option>
+              <option value="Eph">Ephesians</option>
+              <option value="Phil">Philippians</option>
+              <option value="Col">Colossians</option>
+              <option value="1Thess">1 Thessalonians</option>
+              <option value="2Thess">2 Thessalonians</option>
+              <option value="1Tim">1 Timothy</option>
+              <option value="2Tim">2 Timothy</option>
+              <option value="Titus">Titus</option>
+              <option value="Phlm">Philemon</option>
+              <option value="Heb">Hebrews</option>
+              <option value="Jas">James</option>
+              <option value="1Pet">1 Peter</option>
+              <option value="2Pet">2 Peter</option>
+              <option value="1John">1 John</option>
+              <option value="2John">2 John</option>
+              <option value="3John">3 John</option>
+              <option value="Jude">Jude</option>
+              <option value="Rev">Revelation</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Chapter and Verse -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="chapterInput">Chapter</label>
+            <input type="number" id="chapterInput" class="form-control" min="1" placeholder="1">
+          </div>
+          <div class="form-group">
+            <label for="verseInput">Verse</label>
+            <input type="number" id="verseInput" class="form-control" min="1" placeholder="1">
+          </div>
+        </div>
+
+        <!-- Heading Level -->
+        <div class="form-group">
+          <label>Heading Level</label>
+          <div class="level-buttons">
+            <button class="level-btn active" data-level="1">H1</button>
+            <button class="level-btn" data-level="2">H2</button>
+            <button class="level-btn" data-level="3">H3</button>
+            <button class="level-btn" data-level="4">H4</button>
+            <button class="level-btn" data-level="5">H5</button>
+            <button class="level-btn" data-level="6">H6</button>
+          </div>
+        </div>
+
+        <!-- Heading Text -->
+        <div class="form-group">
+          <label for="headingText">Heading Text</label>
+          <input type="text" id="headingText" class="form-control" placeholder="Enter heading text">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelBtn" class="btn btn-secondary">Cancel</button>
+        <button id="saveHeadingBtn" class="btn btn-primary">Save Heading</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div id="exportModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Export Outline</h2>
+        <button id="closeExportModal" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="export-options">
+          <button id="exportHtmlBtn" class="export-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>Export as HTML</span>
+          </button>
+          <button id="exportXmlBtn" class="export-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 2v6h6M10 13l-2 2 2 2M14 13l2 2-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Export as XML</span>
+          </button>
+          <button id="exportJsonBtn" class="export-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 2v6h6M10 12h4M10 16h4M10 8h2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Export as JSON</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Modal -->
+  <div id="importModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Import Outline</h2>
+        <button id="closeImportModal" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="import-section">
+          <p style="font-size: 13px; color: #666; margin-bottom: 16px;">
+            Import a previously exported JSON file to restore your outline. 
+            This will add the headings to your current database.
+          </p>
+          <input type="file" id="importFileInput" accept=".json" style="display: none;">
+          <button id="importJsonBtn" class="export-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5m0 0L7 8m5-5v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Choose JSON File</span>
+          </button>
+          <div id="importStatus" style="margin-top: 16px; font-size: 13px; display: none; padding: 12px; border-radius: 6px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

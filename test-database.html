@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Test</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    #output {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bible Outline Database Test</h1>
+  <p>Open browser console (F12) to see detailed logs</p>
+  
+  <button onclick="testInit()">1. Initialize Database</button>
+  <button onclick="testAdd()">2. Add Test Heading</button>
+  <button onclick="testGet()">3. Get All Headings</button>
+  <button onclick="testExport()">4. Export JSON</button>
+  <button onclick="clearDB()">Clear Database</button>
+  
+  <div id="output">Click buttons to test...</div>
+
+  <script src="db.js"></script>
+  <script>
+    const output = document.getElementById('output');
+    
+    function log(msg) {
+      console.log(msg);
+      output.textContent += msg + '\n';
+    }
+    
+    async function testInit() {
+      output.textContent = '';
+      log('Testing database initialization...');
+      try {
+        await db.init();
+        log('✓ Database initialized successfully');
+        log('Database object: ' + (db.db ? 'OK' : 'NULL'));
+      } catch (error) {
+        log('✗ Error: ' + error.message);
+        console.error(error);
+      }
+    }
+    
+    async function testAdd() {
+      log('\nTesting add heading...');
+      try {
+        const heading = {
+          book: 'Gen',
+          reference: 'Gen.1.1',
+          level: 1,
+          text: 'Test Heading ' + Date.now()
+        };
+        log('Adding: ' + JSON.stringify(heading, null, 2));
+        
+        const id = await db.addHeading(heading);
+        log('✓ Added successfully with ID: ' + id);
+      } catch (error) {
+        log('✗ Error: ' + error.message);
+        console.error(error);
+      }
+    }
+    
+    async function testGet() {
+      log('\nTesting get all headings...');
+      try {
+        const headings = await db.getAllHeadings();
+        log('✓ Retrieved ' + headings.length + ' heading(s)');
+        log(JSON.stringify(headings, null, 2));
+      } catch (error) {
+        log('✗ Error: ' + error.message);
+        console.error(error);
+      }
+    }
+    
+    async function testExport() {
+      log('\nTesting export...');
+      try {
+        const headings = await db.getAllHeadings();
+        const json = JSON.stringify(headings.map(h => ({
+          text: h.text,
+          level: h.level,
+          reference: h.reference,
+          book: h.book
+        })), null, 2);
+        
+        log('✓ Export data:');
+        log(json);
+        
+        // Download
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'test-export.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        log('✓ Downloaded test-export.json');
+      } catch (error) {
+        log('✗ Error: ' + error.message);
+        console.error(error);
+      }
+    }
+    
+    async function clearDB() {
+      log('\nClearing database...');
+      try {
+        const request = indexedDB.deleteDatabase('BibleOutlineDB');
+        request.onsuccess = () => {
+          log('✓ Database cleared');
+          log('Refresh page and click "Initialize Database" to start fresh');
+        };
+        request.onerror = () => {
+          log('✗ Error clearing database');
+        };
+      } catch (error) {
+        log('✗ Error: ' + error.message);
+        console.error(error);
+      }
+    }
+    
+    // Auto-init on load
+    window.addEventListener('load', async () => {
+      log('Page loaded. Initializing...');
+      await testInit();
+    });
+  </script>
+</body>
+</html>

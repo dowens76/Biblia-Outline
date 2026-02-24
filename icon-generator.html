@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icon Generator - Bible Outline Builder</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #667eea;
+    }
+    .instructions {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .icon-preview {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .icon-container {
+      text-align: center;
+    }
+    canvas {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #5568d3;
+    }
+    .note {
+      background: #fff9c4;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border-left: 4px solid #fbc02d;
+    }
+  </style>
+</head>
+<body>
+  <h1>📖 Bible Outline Builder - Icon Generator</h1>
+  
+  <div class="instructions">
+    <h2>Quick Start</h2>
+    <p>This page generates simple icons for the Bible Outline Builder extension.</p>
+    <ol>
+      <li>Click each "Download" button below to save the icons</li>
+      <li>Create a folder called <code>icons</code> in your extension directory</li>
+      <li>Save the downloaded files as <code>icon16.png</code>, <code>icon48.png</code>, and <code>icon128.png</code></li>
+      <li>Load the extension in Brave/Chrome</li>
+    </ol>
+  </div>
+
+  <h2>Generated Icons</h2>
+  <div class="icon-preview">
+    <div class="icon-container">
+      <canvas id="icon16" width="16" height="16"></canvas>
+      <div>16x16</div>
+      <button onclick="downloadIcon('icon16', 'icon16.png')">Download</button>
+    </div>
+    <div class="icon-container">
+      <canvas id="icon48" width="48" height="48"></canvas>
+      <div>48x48</div>
+      <button onclick="downloadIcon('icon48', 'icon48.png')">Download</button>
+    </div>
+    <div class="icon-container">
+      <canvas id="icon128" width="128" height="128"></canvas>
+      <div>128x128</div>
+      <button onclick="downloadIcon('icon128', 'icon128.png')">Download</button>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> These are simple placeholder icons. For a more professional look, you can:
+    <ul>
+      <li>Use free icons from <a href="https://www.flaticon.com/search?word=bible" target="_blank">Flaticon</a></li>
+      <li>Design custom icons in tools like Figma or Canva</li>
+      <li>Use emoji-based icons: 📖, 📜, ✝️</li>
+    </ul>
+  </div>
+
+  <script>
+    function drawIcon(canvasId, size) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      
+      // Background gradient
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // Draw a simple book icon
+      ctx.fillStyle = 'white';
+      
+      if (size === 16) {
+        // Simplified for 16x16
+        ctx.fillRect(4, 3, 8, 10);
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(5, 4, 6, 1);
+        ctx.fillRect(5, 6, 6, 1);
+        ctx.fillRect(5, 8, 6, 1);
+      } else {
+        // Book shape
+        const bookWidth = size * 0.5;
+        const bookHeight = size * 0.65;
+        const x = (size - bookWidth) / 2;
+        const y = (size - bookHeight) / 2;
+        
+        // Book cover
+        ctx.fillRect(x, y, bookWidth, bookHeight);
+        
+        // Lines on the book
+        ctx.fillStyle = '#667eea';
+        const lineSpacing = bookHeight / 6;
+        for (let i = 1; i < 5; i++) {
+          ctx.fillRect(x + 4, y + lineSpacing * i, bookWidth - 8, 2);
+        }
+        
+        // Bookmark
+        ctx.fillStyle = '#fbc02d';
+        ctx.fillRect(x + bookWidth * 0.3, y, 3, bookHeight * 0.4);
+      }
+    }
+
+    function downloadIcon(canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      const url = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = url;
+      link.click();
+    }
+
+    // Generate icons on page load
+    drawIcon('icon16', 16);
+    drawIcon('icon48', 48);
+    drawIcon('icon128', 128);
+  </script>
+</body>
+</html>

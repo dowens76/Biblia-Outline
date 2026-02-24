@@ -1,6 +1,6 @@
-# Biblia Outline - Browser Extension
+# Bible Outline Builder - Browser Extension
 
-A powerful Brave/Chrome extension for creating hierarchical outlines of Bible books with verse references. Features a side panel interface that integrates with StepBible.org.
+A powerful Brave/Chrome extension for creating hierarchical outlines of Bible books with verse references. Features a side panel interface that integrates seamlessly with StepBible.org.
 
 ## Features
 
@@ -10,7 +10,7 @@ A powerful Brave/Chrome extension for creating hierarchical outlines of Bible bo
 📊 **Automatic Ranges** - Verse ranges calculated based on heading hierarchy  
 💾 **Persistent Storage** - Data stored in IndexedDB (browser database)  
 📤 **Multiple Export Formats** - Export to HTML, XML, and JSON  
-🎨 **Clean UI** - Professional side panel design  
+🎨 **Beautiful UI** - Clean, professional side panel design  
 🔄 **Real-time Sync** - Side panel highlights current verse location
 
 ## Installation
@@ -210,4 +210,8 @@ MIT License - Free to use, modify, and distribute.
 
 ## Credits
 
-Created for biblical study and exegesis. Designed to work with [StepBible.org](https://www.stepbible.org/), an excellent free online Bible study tool.
+Created for biblical study and exegesis. Designed to work seamlessly with [StepBible.org](https://www.stepbible.org/), an excellent free online Bible study tool.
+
+---
+
+**Happy Bible studying!** 📖✨
