@@ -2,28 +2,33 @@
 
 console.log('Bible Outline Builder content script loaded');
 
-// Use event delegation to handle dynamically loaded verse links
-document.addEventListener('click', function(e) {
-  // Check if clicked element or its parent is a verse link
-  let target = e.target;
-  
-  // Walk up the DOM tree to find a verse link
-  for (let i = 0; i < 3; i++) {
-    if (!target) break;
-    
-    // Check for various verse link patterns used by StepBible
-    if (target.classList && (
-        target.classList.contains('verseLink') ||
-        target.classList.contains('v') ||
-        target.classList.contains('verse') ||
-        target.hasAttribute('data-verse')
+// Returns a verse element at or above `el`, or null
+function findVerseElement(el) {
+  for (let i = 0; i < 6; i++) {
+    if (!el) break;
+    if (el.classList && (
+        el.classList.contains('verseLink') ||
+        el.classList.contains('verseStart') ||
+        el.classList.contains('verseNum') ||
+        el.classList.contains('v') ||
+        el.classList.contains('verse') ||
+        el.hasAttribute('data-verse') ||
+        el.hasAttribute('data-ref') ||
+        (el.getAttribute && el.getAttribute('name') && /^\w+\.\d+\.\d+$/.test(el.getAttribute('name')))
     )) {
-      handleVerseClick(target, e);
-      break;
+      return el;
     }
-    
-    target = target.parentElement;
+    el = el.parentElement;
   }
+  return null;
+}
+
+// Use event delegation to handle dynamically loaded verse links
+// Option/Alt+click or Ctrl+click → open Add Heading modal
+// Plain click → highlight heading in side panel
+document.addEventListener('click', function(e) {
+  const verseEl = findVerseElement(e.target);
+  if (verseEl) handleVerseClick(verseEl, e);
 }, true); // Use capture phase to catch events early
 
 // Handle verse link click
@@ -65,8 +70,8 @@ function handleVerseClick(element, event) {
     return;
   }
   
-  // Check for special key combinations
-  if (event.altKey || (event.shiftKey && event.type === 'contextmenu')) {
+  // Alt/Option+click or Ctrl+click → open Add Heading modal
+  if (event.altKey || event.ctrlKey) {
     event.preventDefault();
     event.stopPropagation();
     console.log('Creating heading from verse:', reference);
@@ -81,28 +86,6 @@ function handleVerseClick(element, event) {
   }
 }
 
-// Add right-click handler
-document.addEventListener('contextmenu', function(e) {
-  let target = e.target;
-  
-  for (let i = 0; i < 3; i++) {
-    if (!target) break;
-    
-    if (target.classList && (
-        target.classList.contains('verseLink') ||
-        target.classList.contains('v') ||
-        target.classList.contains('verse') ||
-        target.hasAttribute('data-verse')
-    )) {
-      if (e.shiftKey) {
-        handleVerseClick(target, e);
-      }
-      break;
-    }
-    
-    target = target.parentElement;
-  }
-}, true);
 
 // Get current book and chapter from page context
 function getCurrentContext() {

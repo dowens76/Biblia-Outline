@@ -13,6 +13,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       type: 'HIGHLIGHT_HEADING',
       reference: message.reference
     });
+  } else if (message.type === 'CREATE_HEADING_FROM_VERSE') {
+    // Forward to side panel to open the Add Heading modal
+    chrome.runtime.sendMessage({
+      type: 'OPEN_HEADING_MODAL_WITH_VERSE',
+      reference: message.reference
+    });
   } else if (message.type === 'NAVIGATE_TO_VERSE') {
     // Navigate StepBible to specific verse
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
