@@ -154,25 +154,27 @@ class BibleOutlineDB {
     });
   }
 
-  // Parse reference like "Gen.1.1" or "Gen.1.1b" into components
+  // Parse reference like "Gen.1.1", "Gen.1.1a", or "Gen.1.1b" into components
   parseReference(reference) {
     const parts = reference.split('.');
     const verseRaw = parts[2] || '1';
+    const verseSuffix = verseRaw.endsWith('b') ? 'b' : verseRaw.endsWith('a') ? 'a' : '';
     return {
       book: parts[0],
       chapter: parseInt(parts[1]),
       verse: parseInt(verseRaw),
-      midVerse: verseRaw.endsWith('b')
+      verseSuffix,
+      midVerse: verseSuffix === 'b'  // convenience flag
     };
   }
 
-  // Create a sort key for ordering headings
-  // "Gen.1.1b" sorts after "Gen.1.1" and before "Gen.1.2"
+  // Create a sort key for ordering headings.
+  // Suffixes sort correctly: ...001 < ...001a < ...001b < ...002
   createSortKey(reference) {
-    const { book, chapter, verse, midVerse } = this.parseReference(reference);
+    const { book, chapter, verse, verseSuffix } = this.parseReference(reference);
     const bookOrder = this.getBookOrder(book);
     const key = `${bookOrder.toString().padStart(3, '0')}.${chapter.toString().padStart(3, '0')}.${verse.toString().padStart(3, '0')}`;
-    return midVerse ? key + 'b' : key;
+    return verseSuffix ? key + verseSuffix : key;
   }
 
   // Get canonical order of book
