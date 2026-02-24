@@ -358,6 +358,7 @@ function openAddHeadingModal() {
   document.getElementById('verseInput').value = '1';
   document.getElementById('midVerseCheck').checked = false;
   document.getElementById('headingText').value = '';
+  document.getElementById('headingNotes').value = '';
 
   // Reset level selection
   document.querySelectorAll('.level-btn').forEach(btn => {
@@ -381,6 +382,7 @@ function openAddHeadingModalWithVerse(reference) {
   document.getElementById('verseInput').value = verse;
   document.getElementById('midVerseCheck').checked = false;
   document.getElementById('headingText').value = '';
+  document.getElementById('headingNotes').value = '';
 
   // Reset level selection
   document.querySelectorAll('.level-btn').forEach(btn => {
@@ -405,6 +407,7 @@ function openEditHeadingModal(heading) {
   document.getElementById('verseInput').value = verse;
   document.getElementById('midVerseCheck').checked = midVerse;
   document.getElementById('headingText').value = heading.text;
+  document.getElementById('headingNotes').value = heading.notes || '';
   
   // Set level
   document.querySelectorAll('.level-btn').forEach(btn => {
@@ -429,8 +432,9 @@ async function saveHeading() {
   const verse = document.getElementById('verseInput').value;
   const midVerse = document.getElementById('midVerseCheck').checked;
   const text = document.getElementById('headingText').value.trim();
+  const notes = document.getElementById('headingNotes').value.trim();
 
-  console.log('Save heading called:', { book, chapter, verse, midVerse, text, level: selectedHeadingLevel });
+  console.log('Save heading called:', { book, chapter, verse, midVerse, text, notes, level: selectedHeadingLevel });
 
   if (!book || !chapter || !verse || !text) {
     alert('Please fill in all fields');
@@ -448,7 +452,8 @@ async function saveHeading() {
         book,
         reference,
         level: selectedHeadingLevel,
-        text
+        text,
+        notes
       });
       console.log('Heading updated successfully');
     } else {
@@ -458,7 +463,8 @@ async function saveHeading() {
         book,
         reference,
         level: selectedHeadingLevel,
-        text
+        text,
+        notes
       });
       console.log('Heading added successfully with id:', id);
     }
