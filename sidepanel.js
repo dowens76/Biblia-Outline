@@ -447,7 +447,7 @@ function generateHTMLExport(headings) {
   <title>Bible Outline</title>
   <style>
     body { font-family: Georgia, serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
-    h1 { color: #333; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+    h1 { color: #333; border-bottom: 3px solid #8B4513; padding-bottom: 10px; }
     h2 { color: #444; margin-top: 30px; }
     h3 { color: #555; margin-top: 25px; }
     h4 { color: #666; margin-top: 20px; }
