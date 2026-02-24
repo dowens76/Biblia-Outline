@@ -126,6 +126,7 @@ function setupEventListeners() {
   // Export
   document.getElementById('exportBtn').addEventListener('click', openExportModal);
   document.getElementById('closeExportModal').addEventListener('click', closeExportModal);
+  document.getElementById('copyClipboardBtn').addEventListener('click', copyToClipboard);
   document.getElementById('exportMarkdownBtn').addEventListener('click', () => exportOutline('markdown'));
   document.getElementById('exportHtmlBtn').addEventListener('click', () => exportOutline('html'));
   document.getElementById('exportXmlBtn').addEventListener('click', () => exportOutline('xml'));
@@ -615,6 +616,63 @@ function generateMarkdownExport(headings) {
   }
 
   return md;
+}
+
+// Generate plain-text export (for clipboard)
+function generatePlainTextExport(headings) {
+  const groups = assignOutlineNumbers(groupHeadingsByBook(headings));
+  const indent = ['', '  ', '    ', '      ', '        ', '          '];
+  let text = '';
+
+  for (const group of groups) {
+    if (text) text += '\n';
+    text += `${group.bookName}\n`;
+    for (const heading of group.headings) {
+      const startDisplay = db.formatReference(heading.startRef);
+      const endDisplay = heading.endRef !== heading.startRef
+        ? `\u2013${db.formatReference(heading.endRef)}` : '';
+      const pad = indent[heading.level - 1] || '';
+      text += `${pad}${heading.prefix} ${heading.text} (${startDisplay}${endDisplay})\n`;
+    }
+  }
+
+  return text.trimEnd();
+}
+
+// Copy outline to clipboard
+async function copyToClipboard() {
+  const btn = document.getElementById('copyClipboardBtn');
+  const span = btn.querySelector('span');
+  try {
+    const scope = document.querySelector('input[name="exportScope"]:checked')?.value ?? 'all';
+    let rawHeadings;
+    if (scope === 'current' && currentBook) {
+      rawHeadings = await db.getHeadingsByBooks(getBooksToLoad(currentBook));
+    } else {
+      rawHeadings = await db.getAllHeadings();
+    }
+
+    let fallbackEndRef = null;
+    if (scope === 'current' && currentBook) {
+      const books = getBooksToLoad(currentBook);
+      fallbackEndRef = db.getLastVerseRef(books[books.length - 1]);
+    } else if (rawHeadings.length > 0) {
+      const lastBook = rawHeadings[rawHeadings.length - 1].book;
+      const lastGroupBooks = getBooksToLoad(lastBook);
+      fallbackEndRef = db.getLastVerseRef(lastGroupBooks[lastGroupBooks.length - 1]);
+    }
+
+    const headingsWithRanges = db.calculateVerseRanges(rawHeadings, fallbackEndRef);
+    const text = generatePlainTextExport(headingsWithRanges);
+    await navigator.clipboard.writeText(text);
+
+    span.textContent = 'Copied!';
+    setTimeout(() => { span.textContent = 'Copy to Clipboard'; }, 2000);
+  } catch (error) {
+    console.error('Error copying to clipboard:', error);
+    span.textContent = 'Copy failed';
+    setTimeout(() => { span.textContent = 'Copy to Clipboard'; }, 2000);
+  }
 }
 
 // Generate HTML export
