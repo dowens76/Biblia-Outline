@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Biblia Outline",
-  "version": "1.0.0",
+  "name": "Bible Outliner",
+  "version": "0.1.1",
   "description": "Create hierarchical outlines of Bible books with side panel navigation",
   "permissions": [
     "storage",
@@ -14,7 +14,7 @@
     "https://www.stepbible.org/*"
   ],
   "action": {
-    "default_title": "Toggle Biblia Outline Panel"
+    "default_title": "Toggle Bible Outliner Panel"
   },
   "side_panel": {
     "default_path": "sidepanel.html"
