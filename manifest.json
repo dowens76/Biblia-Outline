@@ -14,12 +14,9 @@
   ],
   "host_permissions": [
     "https://www.stepbible.org/*",
-    "https://www.googleapis.com/*"
+    "https://www.googleapis.com/*",
+    "https://oauth2.googleapis.com/*"
   ],
-  "oauth2": {
-    "client_id": "PASTE_YOUR_CLIENT_ID_HERE",
-    "scopes": ["https://www.googleapis.com/auth/drive.file"]
-  },
   "action": {
     "default_title": "Toggle Bible Outliner Panel"
   },

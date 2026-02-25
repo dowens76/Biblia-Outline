@@ -7,9 +7,10 @@
 // Up to 5 dated backups are retained; older ones are automatically deleted
 // from Drive when a new backup is created.
 //
-// Auth uses chrome.identity.getAuthToken() with the oauth2 block in manifest.json.
-// The user must first set up a Google Cloud project and paste their Client ID
-// into manifest.json before this feature will work.
+// Auth uses chrome.identity.launchWebAuthFlow() — works in both Brave and Chrome.
+// Create a "Web application" OAuth 2.0 client in Google Cloud Console and add
+// https://<extension-id>.chromiumapp.org/ as an Authorized redirect URI.
+// Paste the resulting Client ID into DRIVE_CLIENT_ID below.
 //
 // Loaded in order: db.js → backup.js → drive.js → sidepanel.js
 
@@ -18,42 +19,120 @@
 const DRIVE_FOLDER_NAME = 'BibleOutlinerBackups';
 const DRIVE_BACKUP_MAX_COUNT = 5;
 
+// Paste your Web application OAuth 2.0 Client ID here:
+const DRIVE_CLIENT_ID = '464287372031-dchuhmamm5dntccr52v29hbvhll4fjsq.apps.googleusercontent.com';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file email';
+
 // ── Auth ─────────────────────────────────────────────────────────────────────
 
 /**
- * Get a Google OAuth token via chrome.identity.
- * @param {boolean} interactive  true = show OAuth popup; false = silent (cached only)
- * @returns {Promise<string>} OAuth access token
+ * Load a cached token (with its expiry) from storage.
+ * @returns {Promise<{token: string, expiresAt: number}|null>}
  */
-function driveGetToken(interactive) {
-  return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive }, token => {
-      if (chrome.runtime.lastError || !token) {
-        reject(new Error(chrome.runtime.lastError?.message || 'No token'));
-      } else {
-        resolve(token);
-      }
+function loadDriveToken() {
+  return new Promise(resolve => {
+    chrome.storage.local.get('drive_token', result => {
+      resolve(result.drive_token || null);
     });
   });
 }
 
 /**
- * Revoke the cached OAuth token and clear all Drive storage.
+ * Persist a token and its expiry time.
+ * @param {string} token
+ * @param {number} expiresAt  Unix ms timestamp
+ */
+function saveDriveToken(token, expiresAt) {
+  return new Promise(resolve => {
+    chrome.storage.local.set({ drive_token: { token, expiresAt } }, resolve);
+  });
+}
+
+/**
+ * Run the OAuth implicit flow via launchWebAuthFlow.
+ * Works in Brave and Chrome without requiring Chrome's Google account integration.
+ * @param {boolean} interactive  true = show consent UI if needed; false = silent
+ * @returns {Promise<string>} access token
+ */
+function _launchOAuthFlow(interactive) {
+  const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`;
+  const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+  authUrl.searchParams.set('client_id', DRIVE_CLIENT_ID);
+  authUrl.searchParams.set('redirect_uri', redirectUri);
+  authUrl.searchParams.set('response_type', 'token');
+  authUrl.searchParams.set('scope', DRIVE_SCOPE);
+  if (!interactive) authUrl.searchParams.set('prompt', 'none');
+
+  return new Promise((resolve, reject) => {
+    chrome.identity.launchWebAuthFlow(
+      { url: authUrl.toString(), interactive },
+      async redirectUrl => {
+        if (chrome.runtime.lastError || !redirectUrl) {
+          reject(new Error(chrome.runtime.lastError?.message || 'Auth cancelled'));
+          return;
+        }
+        // Token is in the URL fragment: ...#access_token=TOKEN&expires_in=3600&...
+        const fragment = redirectUrl.includes('#')
+          ? redirectUrl.substring(redirectUrl.indexOf('#') + 1)
+          : '';
+        const params = new URLSearchParams(fragment);
+        const token = params.get('access_token');
+        const expiresIn = parseInt(params.get('expires_in') || '3600', 10);
+        if (!token) {
+          reject(new Error('No access token in response'));
+          return;
+        }
+        await saveDriveToken(token, Date.now() + expiresIn * 1000);
+        resolve(token);
+      }
+    );
+  });
+}
+
+/**
+ * Get a valid OAuth token. Returns cached token if still valid, otherwise
+ * attempts a silent refresh, then an interactive flow if requested.
+ * @param {boolean} interactive  true = show OAuth popup if needed
+ * @returns {Promise<string>} access token
+ */
+async function driveGetToken(interactive) {
+  // Return cached token if it has more than 2 minutes remaining
+  const stored = await loadDriveToken();
+  if (stored && Date.now() < stored.expiresAt - 120000) {
+    return stored.token;
+  }
+
+  if (interactive) {
+    return _launchOAuthFlow(true);
+  }
+
+  // Non-interactive: try silent refresh (prompt=none)
+  try {
+    return await _launchOAuthFlow(false);
+  } catch {
+    throw new Error('No token available');
+  }
+}
+
+/**
+ * Revoke the token and clear all Drive storage.
  * @returns {Promise<void>}
  */
 async function driveDisconnect() {
   try {
-    const token = await driveGetToken(false);
-    // Revoke with Google's endpoint
-    await fetch(`https://accounts.google.com/o/oauth2/revoke?token=${token}`);
-    // Remove from Chrome's cache
-    await new Promise(resolve => chrome.identity.removeCachedAuthToken({ token }, resolve));
+    const stored = await loadDriveToken();
+    if (stored) {
+      // Best-effort revocation — ignore failures
+      await fetch(`https://oauth2.googleapis.com/revoke?token=${stored.token}`, {
+        method: 'POST'
+      });
+    }
   } catch (_) {
-    // Ignore errors — token may already be gone
+    // Ignore revocation errors
   }
   await new Promise(resolve => {
     chrome.storage.local.remove(
-      ['drive_connected', 'drive_user_email', 'drive_folder_id', 'drive_entries'],
+      ['drive_connected', 'drive_user_email', 'drive_folder_id', 'drive_entries', 'drive_token'],
       resolve
     );
   });
@@ -369,25 +448,32 @@ function showDriveStatus(message, type = 'info') {
 
 /**
  * Refresh the Drive UI to reflect current connection state.
+ *
+ * Three states:
+ *  - Fully connected (drive_connected = true):  email + Disconnect
+ *  - Partially connected (token stored but not connected): Connect + Disconnect
+ *  - Not connected at all: Connect only
  */
 async function refreshDriveUI() {
   const { connected, email } = await loadDriveConnectionState();
+  const storedToken = await loadDriveToken();
+  const hasAnyState = connected || !!storedToken;
+
   const emailEl = document.getElementById('driveUserEmail');
   const connectBtn = document.getElementById('driveConnectBtn');
   const disconnectBtn = document.getElementById('driveDisconnectBtn');
 
-  if (connected) {
-    if (emailEl) {
-      emailEl.textContent = email || '';
-      emailEl.style.display = email ? 'inline' : 'none';
-    }
-    if (connectBtn) connectBtn.style.display = 'none';
-    if (disconnectBtn) disconnectBtn.style.display = 'inline-flex';
-  } else {
-    if (emailEl) emailEl.style.display = 'none';
-    if (connectBtn) connectBtn.style.display = 'inline-flex';
-    if (disconnectBtn) disconnectBtn.style.display = 'none';
+  // Email: only shown when fully connected
+  if (emailEl) {
+    emailEl.textContent = connected ? (email || '') : '';
+    emailEl.style.display = connected && email ? 'inline' : 'none';
   }
+
+  // Connect button: shown when not fully connected
+  if (connectBtn) connectBtn.style.display = connected ? 'none' : 'inline-flex';
+
+  // Disconnect button: shown whenever any Drive state exists
+  if (disconnectBtn) disconnectBtn.style.display = hasAnyState ? 'inline-flex' : 'none';
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────
@@ -415,7 +501,21 @@ async function initDrive() {
         const email = await driveFetchEmail(token);
         await saveDriveConnectionState(true, email);
         await refreshDriveUI();
-        showDriveStatus(`Connected as ${email}`, 'success');
+        showDriveStatus(`Connected as ${email} — backing up…`, 'info');
+
+        // Immediately back up current data to Drive so the user doesn't have
+        // to wait until the next change or manually trigger a backup.
+        // Uses the cached token (non-interactive) since we just obtained it.
+        const jsonContent = await buildBackupContent();
+        const today = getTodayString();
+        const filename = `${BACKUP_FILENAME_PREFIX}${today}.json`;
+        const result = await executeDriveBackup(jsonContent, filename, false);
+        showDriveStatus(
+          result.ok
+            ? `Connected as ${email} · Drive ✓`
+            : `Connected as ${email} · ${result.message}`,
+          result.ok ? 'success' : 'error'
+        );
       } catch (err) {
         showDriveStatus('Connection failed: ' + err.message, 'error');
       } finally {
