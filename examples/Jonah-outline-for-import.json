@@ -1,0 +1,72 @@
+[
+  {
+    "book": "Jonah",
+    "bookName": "Jonah",
+    "headings": [
+      {
+        "text": "Jonah and the Sailors: Jonah Unhappily Fails to Escape God's Mission",
+        "level": 1,
+        "reference": "Jonah.1.1",
+        "book": "Jonah",
+        "startRef": "Jonah.1.1",
+        "endRef": "Jonah.2.10"
+      },
+      {
+        "text": "God Gives Jonah a Mission",
+        "level": 2,
+        "reference": "Jonah.1.1",
+        "book": "Jonah",
+        "startRef": "Jonah.1.1",
+        "endRef": "Jonah.1.2"
+      },
+      {
+        "text": "Jonah Fails to Escape God's Mission",
+        "level": 2,
+        "reference": "Jonah.1.3",
+        "book": "Jonah",
+        "startRef": "Jonah.1.3",
+        "endRef": "Jonah.1.17"
+      },
+      {
+        "text": "Jonah Celebrates God's Rescue from the Belly of the Fish",
+        "level": 2,
+        "reference": "Jonah.2.1",
+        "book": "Jonah",
+        "startRef": "Jonah.2.1",
+        "endRef": "Jonah.2.10"
+      },
+      {
+        "text": "Jonah and the Ninevites: Jonah Unhappily Succeeds in God's Mission",
+        "level": 1,
+        "reference": "Jonah.3.1",
+        "book": "Jonah",
+        "startRef": "Jonah.3.1",
+        "endRef": "Jonah.4.11"
+      },
+      {
+        "text": "God Gives Jonah a Mission (again)",
+        "level": 2,
+        "reference": "Jonah.3.1",
+        "book": "Jonah",
+        "startRef": "Jonah.3.1",
+        "endRef": "Jonah.3.2"
+      },
+      {
+        "text": "Jonah Succeeds in God's Mission",
+        "level": 2,
+        "reference": "Jonah.3.3",
+        "book": "Jonah",
+        "startRef": "Jonah.3.3",
+        "endRef": "Jonah.3.10"
+      },
+      {
+        "text": "Jonah Complains When God Rescues the Ninevites",
+        "level": 2,
+        "reference": "Jonah.4.1",
+        "book": "Jonah",
+        "startRef": "Jonah.4.1",
+        "endRef": "Jonah.4.11"
+      }
+    ]
+  }
+]
