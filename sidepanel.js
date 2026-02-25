@@ -55,7 +55,12 @@ async function init() {
   await db.init();
   setupEventListeners();
   await loadCurrentBook();
-  
+
+  // Set up backup UI and run auto-backup if due
+  await initBackup();
+  await initDrive();
+  await maybeAutoBackup();
+
   // Listen for messages from background/content scripts
   chrome.runtime.onMessage.addListener(handleMessage);
 }

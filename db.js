@@ -111,7 +111,7 @@ function getPreviousVerse(reference) {
 class BibleOutlineDB {
   constructor() {
     this.dbName = 'BibleOutlineDB';
-    this.version = 1;
+    this.version = 2;
     this.db = null;
   }
 
@@ -149,6 +149,12 @@ class BibleOutlineDB {
           store.createIndex('level', 'level', { unique: false });
           store.createIndex('sortKey', 'sortKey', { unique: false });
           console.log('Object store created with indexes');
+        }
+
+        // Create settings object store (v2+)
+        if (!db.objectStoreNames.contains('settings')) {
+          db.createObjectStore('settings', { keyPath: 'key' });
+          console.log('Settings object store created');
         }
       };
     });
@@ -364,6 +370,28 @@ class BibleOutlineDB {
   formatReference(ref) {
     const parts = ref.split('.');
     return `${parts[1]}:${parts[2]}`;
+  }
+
+  // ── Settings store helpers (used by backup.js) ──────────────────────────
+
+  async getSetting(key) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(['settings'], 'readonly');
+      const store = transaction.objectStore('settings');
+      const request = store.get(key);
+      request.onsuccess = () => resolve(request.result ? request.result.value : null);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async setSetting(key, value) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(['settings'], 'readwrite');
+      const store = transaction.objectStore('settings');
+      const request = store.put({ key, value });
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
   }
 }
 

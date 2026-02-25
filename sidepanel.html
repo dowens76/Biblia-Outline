@@ -149,6 +149,53 @@
       </div>
       <div id="headingsList" class="headings-list"></div>
     </div>
+
+    <!-- Settings / Backup Footer -->
+    <div id="settingsFooter" class="settings-footer">
+      <button id="settingsToggleBtn" class="settings-toggle" aria-expanded="false">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <circle cx="6.5" cy="6.5" r="2" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M6.5 1v1M6.5 11v1M1 6.5h1M11 6.5h1M2.4 2.4l.7.7M9.9 9.9l.7.7M9.9 2.4l-.7.7M2.4 9.9l.7-.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        Settings
+        <svg class="chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div id="settingsPanel" class="settings-panel" style="display:none;">
+        <div class="backup-section">
+          <div class="backup-folder-row">
+            <span class="backup-label">Downloads subfolder:</span>
+            <input id="backupSubfolderInput" class="backup-subfolder-input"
+                   type="text" value="BibleOutlinerBackups" spellcheck="false">
+          </div>
+          <div class="backup-actions-row">
+            <button id="backupNowBtn" class="btn-small btn-small-primary">Backup Now</button>
+            <span id="backupStatus" class="backup-status"></span>
+          </div>
+        </div>
+        <hr class="settings-divider">
+        <div class="drive-section">
+          <div class="drive-header-row">
+            <svg width="14" height="14" viewBox="0 0 87.3 78" aria-hidden="true">
+              <path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H.1c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+              <path d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.3 49.15c-.8 1.4-1.2 2.95-1.2 4.5h27.5z" fill="#00ac47"/>
+              <path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5H59.8l5.85 11.5z" fill="#ea4335"/>
+              <path d="M43.65 25L57.4 1.2C56.05.4 54.5 0 52.9 0H34.4c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+              <path d="M59.8 53.65H27.6L13.85 77.45c1.35.8 2.9 1.2 4.5 1.2h50.6c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+              <path d="M73.4 26.95l-12.65-21.9c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25l16.15 28H87.2c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+            </svg>
+            <span class="backup-label">Google Drive backup</span>
+            <span id="driveUserEmail" class="drive-email" style="display:none;"></span>
+          </div>
+          <div class="drive-status-row">
+            <button id="driveConnectBtn" class="btn-small btn-small-primary" style="display:none;">Connect</button>
+            <button id="driveDisconnectBtn" class="btn-small" style="display:none;">Disconnect</button>
+            <span id="driveStatus" class="drive-status"></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Add/Edit Heading Modal -->
@@ -398,6 +445,8 @@
   </div>
 
   <script src="db.js"></script>
+  <script src="backup.js"></script>
+  <script src="drive.js"></script>
   <script src="sidepanel.js"></script>
 </body>
 </html>

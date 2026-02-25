@@ -648,3 +648,173 @@ body.reorder-mode .heading-item:hover .heading-actions {
 .heading-item.drag-over-above {
   border-top: 2px solid #7B3410;
 }
+
+/* ── Settings / Backup Footer ─────────────────────────────────────────────── */
+
+.settings-footer {
+  border-top: 1px solid #E0D4C0;
+  background: #F5EDD8;
+  flex-shrink: 0;
+}
+
+.settings-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: #7B3410;
+  text-align: left;
+}
+
+.settings-toggle:hover {
+  background: #EDE5D5;
+}
+
+.settings-toggle .chevron {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+
+.settings-toggle[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+.settings-panel {
+  padding: 10px 14px 12px;
+  border-top: 1px solid #E0D4C0;
+}
+
+.backup-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.backup-folder-row,
+.backup-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.backup-label {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.backup-subfolder-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  padding: 3px 6px;
+  border: 1px solid #C8A882;
+  border-radius: 4px;
+  background: white;
+  color: #7B3410;
+  font-weight: 600;
+}
+
+.backup-subfolder-input:focus {
+  outline: none;
+  border-color: #7B3410;
+}
+
+.btn-small {
+  padding: 4px 10px;
+  border: 1px solid #C8A882;
+  border-radius: 4px;
+  background: white;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #555;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-small:hover:not(:disabled) {
+  background: #F5EDD8;
+  border-color: #7B3410;
+}
+
+.btn-small:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.btn-small-primary {
+  background: #7B3410;
+  color: white;
+  border-color: #7B3410;
+}
+
+.btn-small-primary:hover:not(:disabled) {
+  background: #5C2008;
+  border-color: #5C2008;
+}
+
+.backup-status {
+  font-size: 11px;
+  color: #666;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.backup-status.success { color: #2e7d32; }
+.backup-status.error   { color: #c62828; }
+.backup-status.info    { color: #666; }
+
+/* ── Google Drive section ─────────────────────────────────────────────────── */
+
+.settings-divider {
+  border: none;
+  border-top: 1px solid #E0D4C0;
+  margin: 8px 0;
+}
+
+.drive-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drive-header-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.drive-email {
+  font-size: 11px;
+  color: #555;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 130px;
+}
+
+.drive-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.drive-status {
+  font-size: 11px;
+  color: #555;
+}
+.drive-status.success { color: #2e7d32; }
+.drive-status.error   { color: #c62828; }
+.drive-status.info    { color: #555; }
