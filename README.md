@@ -4,18 +4,18 @@ A Brave/Chrome extension for creating hierarchical outlines of Bible books with 
 
 ## Features
 
-**Hierarchical Outlines** — Create headings at 6 levels (H1–H6) with traditional outline numbering (I., A., 1., a., (1), (a))
-**StepBible Integration** — Hover over any verse at StepBible.org and click "+ Heading" to add a heading at that verse
-**Smart Navigation** — Click any heading in the panel to jump to that verse in StepBible
-**Automatic Verse Ranges** — Ranges are calculated from each heading to the next heading of equal or higher level
-**Mid-verse Support** — Mark a heading as mid-verse to append a "b" suffix to the reference (e.g., Gen.1.1b)
-**Persistent Storage** — All data stored locally in IndexedDB (survives browser restarts, never leaves your device)
-**Reorder Headings** — Manually drag and drop headings into any order; order is saved to the database
-**Notes** — Add optional notes to any heading
-**Multiple Export Formats** — Export to Markdown, HTML, XML, JSON, Word (.docx), LibreOffice (.odt), and PDF
-**Copy to Clipboard** — Copy the outline as plain text directly to the clipboard (no download needed)
-**Import** — Re-import a previously exported JSON file to restore or merge headings
-**Grouped Books** — 1–2 Samuel, 1–2 Kings, 1–2 Chronicles, and Ezra–Nehemiah are treated as single outlines
+- **Hierarchical Outlines** — Create headings at 6 levels (H1–H6) with traditional outline numbering (I., A., 1., a., (1), (a))
+- **StepBible Integration** — Hover over any verse at StepBible.org and click "+ Heading" to add a heading at that verse
+- **Smart Navigation** — Click any heading in the panel to jump to that verse in StepBible
+- **Automatic Verse Ranges** — Ranges are calculated from each heading to the next heading of equal or higher level
+- **Mid-verse Support** — Mark a heading as mid-verse to append a "b" suffix to the reference (e.g., Gen.1.1b)
+- **Persistent Storage** — All data stored locally in IndexedDB (survives browser restarts, never leaves your device)
+- **Reorder Headings** — Manually drag and drop headings into any order; order is saved to the database
+- **Notes** — Add optional notes to any heading
+- **Multiple Export Formats** — Export to Markdown, HTML, XML, JSON, Word (.docx), LibreOffice (.odt), and PDF
+- **Copy to Clipboard** — Copy the outline as plain text directly to the clipboard (no download needed)
+- **Import** — Re-import a previously exported JSON file to restore or merge headings
+- **Grouped Books** — 1–2 Samuel, 1–2 Kings, 1–2 Chronicles, and Ezra–Nehemiah are treated as single outlines
 
 ## Installation
 
@@ -44,7 +44,7 @@ A Brave/Chrome extension for creating hierarchical outlines of Bible books with 
 
 ### Creating Headings
 
-**Method 1: From StepBible (recommended)**
+**Method 1: From StepBible**
 - Hover over any verse at StepBible.org — a "+ Heading" button appears
 - Click it; the side panel opens the Add Heading modal pre-filled with that verse reference
 
