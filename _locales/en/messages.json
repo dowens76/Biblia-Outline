@@ -1,159 +1,614 @@
 {
-  "appName":               { "message": "Bible Outliner",                                                     "description": "Extension name" },
-  "appDescription":        { "message": "Create hierarchical outlines of Bible books with side panel navigation", "description": "Extension description" },
-  "togglePanel":           { "message": "Toggle Bible Outliner Panel",                                        "description": "Action button tooltip" },
-
-  "addHeading":            { "message": "Add Heading",     "description": "Main header button label" },
-  "addHeadingTitle":       { "message": "Add New Heading", "description": "Tooltip for add heading button" },
-  "reorder":               { "message": "Reorder",         "description": "Reorder button label" },
-  "reorderTitle":          { "message": "Reorder Headings","description": "Tooltip for reorder button" },
-  "importBtn":             { "message": "Import",          "description": "Import button label" },
-  "importBtnTitle":        { "message": "Import Outline",  "description": "Tooltip for import button" },
-  "exportBtn":             { "message": "Export",          "description": "Export button label" },
-  "exportBtnTitle":        { "message": "Export Outline",  "description": "Tooltip for export button" },
-
-  "currentBookLabel":      { "message": "Current Book:",   "description": "Label before book selector" },
-  "selectBook":            { "message": "-- Select Book --","description": "Placeholder option in book selector" },
-  "goToBookTitle":         { "message": "Go to this book in the Bible", "description": "Tooltip for go-to-book arrow button" },
-
-  "oldTestament":          { "message": "Old Testament",   "description": "Optgroup label" },
-  "newTestament":          { "message": "New Testament",   "description": "Optgroup label" },
-
-  "book_Gen":   { "message": "Genesis" },       "book_Exod":  { "message": "Exodus" },
-  "book_Lev":   { "message": "Leviticus" },     "book_Num":   { "message": "Numbers" },
-  "book_Deut":  { "message": "Deuteronomy" },   "book_Josh":  { "message": "Joshua" },
-  "book_Judg":  { "message": "Judges" },        "book_Ruth":  { "message": "Ruth" },
-  "book_1Sam":  { "message": "1 Samuel" },      "book_2Sam":  { "message": "2 Samuel" },
-  "book_1Kgs":  { "message": "1 Kings" },       "book_2Kgs":  { "message": "2 Kings" },
-  "book_1Chr":  { "message": "1 Chronicles" },  "book_2Chr":  { "message": "2 Chronicles" },
-  "book_Ezra":  { "message": "Ezra" },          "book_Neh":   { "message": "Nehemiah" },
-  "book_Esth":  { "message": "Esther" },        "book_Job":   { "message": "Job" },
-  "book_Ps":    { "message": "Psalms" },        "book_Prov":  { "message": "Proverbs" },
-  "book_Eccl":  { "message": "Ecclesiastes" },  "book_Song":  { "message": "Song of Solomon" },
-  "book_Isa":   { "message": "Isaiah" },        "book_Jer":   { "message": "Jeremiah" },
-  "book_Lam":   { "message": "Lamentations" },  "book_Ezek":  { "message": "Ezekiel" },
-  "book_Dan":   { "message": "Daniel" },        "book_Hos":   { "message": "Hosea" },
-  "book_Joel":  { "message": "Joel" },          "book_Amos":  { "message": "Amos" },
-  "book_Obad":  { "message": "Obadiah" },       "book_Jonah": { "message": "Jonah" },
-  "book_Mic":   { "message": "Micah" },         "book_Nah":   { "message": "Nahum" },
-  "book_Hab":   { "message": "Habakkuk" },      "book_Zeph":  { "message": "Zephaniah" },
-  "book_Hag":   { "message": "Haggai" },        "book_Zech":  { "message": "Zechariah" },
-  "book_Mal":   { "message": "Malachi" },
-  "book_Matt":  { "message": "Matthew" },       "book_Mark":  { "message": "Mark" },
-  "book_Luke":  { "message": "Luke" },          "book_John":  { "message": "John" },
-  "book_Acts":  { "message": "Acts" },          "book_Rom":   { "message": "Romans" },
-  "book_1Cor":  { "message": "1 Corinthians" }, "book_2Cor":  { "message": "2 Corinthians" },
-  "book_Gal":   { "message": "Galatians" },     "book_Eph":   { "message": "Ephesians" },
-  "book_Phil":  { "message": "Philippians" },   "book_Col":   { "message": "Colossians" },
-  "book_1Thess":{ "message": "1 Thessalonians"},"book_2Thess":{ "message": "2 Thessalonians"},
-  "book_1Tim":  { "message": "1 Timothy" },     "book_2Tim":  { "message": "2 Timothy" },
-  "book_Titus": { "message": "Titus" },         "book_Phlm":  { "message": "Philemon" },
-  "book_Heb":   { "message": "Hebrews" },       "book_Jas":   { "message": "James" },
-  "book_1Pet":  { "message": "1 Peter" },       "book_2Pet":  { "message": "2 Peter" },
-  "book_1John": { "message": "1 John" },        "book_2John": { "message": "2 John" },
-  "book_3John": { "message": "3 John" },        "book_Jude":  { "message": "Jude" },
-  "book_Rev":   { "message": "Revelation" },
-
-  "dragToReorder": { "message": "Drag headings to reorder", "description": "Reorder mode hint text" },
-  "saveOrder":     { "message": "Save Order",               "description": "Confirm reorder button" },
-  "cancelReorder": { "message": "Cancel",                   "description": "Cancel reorder button" },
-
-  "noHeadingsYet": { "message": "No headings yet",          "description": "Empty state message" },
-  "emptyStateHint":{ "message": "Click \"Add Heading\" or click a verse at StepBible.org", "description": "Empty state hint" },
-
-  "settingsLabel":      { "message": "Settings",             "description": "Settings toggle button" },
-  "settingsLanguage":   { "message": "Language:",            "description": "Language selector label" },
-  "colorScheme":        { "message": "Color scheme:",        "description": "Color scheme selector label" },
-  "themeDefault":       { "message": "Default",              "description": "Default theme button" },
-  "themeGray":          { "message": "Gray",                 "description": "Gray theme button" },
-  "themeBlue":          { "message": "Blue",                 "description": "Blue theme button" },
-  "headingColors":      { "message": "Heading colors:",      "description": "Palette picker label" },
-  "downloadsSubfolder": { "message": "Downloads subfolder:", "description": "Backup subfolder label" },
-  "backupNow":          { "message": "Backup Now",           "description": "Backup trigger button" },
-  "googleDriveBackup":  { "message": "Google Drive backup",  "description": "Drive section label" },
-  "driveConnect":       { "message": "Connect",              "description": "Drive connect button" },
-  "driveDisconnect":    { "message": "Disconnect",           "description": "Drive disconnect button" },
-
-  "palette_default": { "message": "Default" },
-  "palette_gray":    { "message": "Gray" },
-  "palette_red":     { "message": "Red" },
-  "palette_pink":    { "message": "Pink" },
-  "palette_grape":   { "message": "Grape" },
-  "palette_violet":  { "message": "Violet" },
-  "palette_indigo":  { "message": "Indigo" },
-  "palette_blue":    { "message": "Blue" },
-  "palette_cyan":    { "message": "Cyan" },
-  "palette_teal":    { "message": "Teal" },
-  "palette_green":   { "message": "Green" },
-  "palette_lime":    { "message": "Lime" },
-  "palette_yellow":  { "message": "Yellow" },
-  "palette_orange":  { "message": "Orange" },
-
-  "addHeadingModal":        { "message": "Add Heading",        "description": "Modal title when adding" },
-  "editHeadingModal":       { "message": "Edit Heading",       "description": "Modal title when editing" },
-  "bookLabel":              { "message": "Book",               "description": "Book field label" },
-  "chapterLabel":           { "message": "Chapter",            "description": "Chapter field label" },
-  "verseLabel":             { "message": "Verse",              "description": "Verse field label" },
-  "midVerse":               { "message": "Mid-verse",          "description": "Mid-verse checkbox label" },
-  "midVerseHint":           { "message": "(appends \"b\" to verse reference)", "description": "Mid-verse hint" },
-  "headingLevel":           { "message": "Heading Level",      "description": "Level selector label" },
-  "headingTextLabel":       { "message": "Heading Text",       "description": "Heading text field label" },
-  "headingTextPlaceholder": { "message": "Enter heading text", "description": "Heading text placeholder" },
-  "notesLabel":             { "message": "Notes",              "description": "Notes field label" },
-  "notesPlaceholder":       { "message": "Optional notes\u2026","description": "Notes placeholder" },
-  "saveHeading":            { "message": "Save Heading",       "description": "Save button in modal" },
-  "cancel":                 { "message": "Cancel",             "description": "Cancel button" },
-
-  "exportOutline":    { "message": "Export Outline",            "description": "Export modal title" },
-  "entireOutline":    { "message": "Entire outline",            "description": "Export scope radio" },
-  "currentBookOnly":  { "message": "Current book only",         "description": "Export scope radio" },
-  "copyClipboard":    { "message": "Copy to Clipboard",         "description": "Clipboard export button" },
-  "exportMarkdown":   { "message": "Export as Markdown",        "description": "Markdown export button" },
-  "exportHtml":       { "message": "Export as HTML",            "description": "HTML export button" },
-  "exportXml":        { "message": "Export as XML",             "description": "XML export button" },
-  "exportJson":       { "message": "Export as JSON",            "description": "JSON export button" },
-  "exportWord":       { "message": "Export as Word (.docx)",    "description": "DOCX export button" },
-  "exportOdt":        { "message": "Export as LibreOffice (.odt)", "description": "ODT export button" },
-  "exportPdf":        { "message": "Export as PDF",             "description": "PDF export button" },
-  "copiedConfirm":    { "message": "Copied!",                   "description": "Clipboard success feedback" },
-  "copyFailed":       { "message": "Copy failed",               "description": "Clipboard error feedback" },
-
-  "importOutline":      { "message": "Import Outline",          "description": "Import modal title" },
-  "importInstructions": { "message": "Import a previously exported JSON file to restore your outline. This will add the headings to your current database.", "description": "Import modal instructions" },
-  "chooseJsonFile":     { "message": "Choose JSON File",        "description": "Import file button" },
-
-  "fillInAllFields":  { "message": "Please fill in all fields",                   "description": "Validation alert" },
-  "confirmDelete":    { "message": "Are you sure you want to delete this heading?","description": "Delete confirmation" },
-  "errorSaving":      { "message": "Error saving heading: $1",                    "description": "Save error alert" },
-  "errorDeleting":    { "message": "Error deleting heading. Please try again.",   "description": "Delete error alert" },
-  "errorSavingOrder": { "message": "Error saving order: $1",                      "description": "Reorder error alert" },
-  "errorExporting":   { "message": "Error exporting outline: $1",                 "description": "Export error alert" },
-
-  "readingFile":       { "message": "Reading file\u2026",       "description": "Import progress: reading" },
-  "invalidJson":       { "message": "Invalid JSON format. Expected an array.", "description": "Import validation error" },
-  "importProgress":    { "message": "Importing $1 heading(s)\u2026", "description": "Import progress with count" },
-  "importSuccess":     { "message": "\u2713 Successfully imported $1 heading(s)", "description": "Import success" },
-  "importSuccessSkipped": { "message": "\u2713 Successfully imported $1 heading(s), $2 skipped (duplicates)", "description": "Import success with skipped count" },
-  "importSuccessWithSkipped": { "message": "\u2713 Successfully imported $1 heading(s) ($2 skipped)", "description": "Import success with skipped" },
-  "importError":       { "message": "\u2717 Error: $1",         "description": "Import error" },
-
-  "backingUp":             { "message": "Backing up\u2026",       "description": "Backup in progress" },
-  "backupLocalSuccess":    { "message": "Local \u2713",            "description": "Local backup success" },
-  "backupLocalFailed":     { "message": "Local: $1",              "description": "Local backup failure with reason" },
-  "backupDriveFailed":     { "message": "Drive: $1",              "description": "Drive backup failure with reason" },
-  "backupNoChange":        { "message": "No changes since last backup ($1)", "description": "No-change message with date" },
-  "backupFailed":          { "message": "Backup failed: $1",      "description": "Backup failure" },
-  "backupDriveNotSignedIn":{ "message": "Drive: not signed in",   "description": "Drive not authenticated" },
-
-  "driveConnecting":       { "message": "Connecting\u2026",       "description": "Drive connecting" },
-  "driveConnectedBacking": { "message": "Connected as $1 \u2014 backing up\u2026", "description": "Drive connected, backing up" },
-  "driveConnectedSuccess": { "message": "Connected as $1 \u00b7 Drive \u2713", "description": "Drive connected success" },
-  "driveConnectionFailed": { "message": "Connection failed: $1",  "description": "Drive connection error" },
-  "driveDisconnecting":    { "message": "Disconnecting\u2026",    "description": "Drive disconnecting" },
-  "driveDisconnected":     { "message": "Disconnected",           "description": "Drive disconnected" },
-  "driveError":            { "message": "Error: $1",              "description": "Drive generic error" },
-  "driveSuccess":          { "message": "Drive \u2713",            "description": "Drive backup success" },
-
-  "exportDocTitle":    { "message": "Bible Outline",            "description": "Title used in exported documents" },
-  "exportGeneratedOn": { "message": "Generated on $1",          "description": "Generated-on line in exported documents" }
+  "appName": {
+    "message": "Bible Outliner",
+    "description": "Extension name"
+  },
+  "appDescription": {
+    "message": "Create hierarchical outlines of Bible books with side panel navigation",
+    "description": "Extension description"
+  },
+  "togglePanel": {
+    "message": "Toggle Bible Outliner Panel",
+    "description": "Action button tooltip"
+  },
+  "addHeading": {
+    "message": "Add Heading",
+    "description": "Main header button label"
+  },
+  "addHeadingTitle": {
+    "message": "Add New Heading",
+    "description": "Tooltip for add heading button"
+  },
+  "reorder": {
+    "message": "Reorder",
+    "description": "Reorder button label"
+  },
+  "reorderTitle": {
+    "message": "Reorder Headings",
+    "description": "Tooltip for reorder button"
+  },
+  "importBtn": {
+    "message": "Import",
+    "description": "Import button label"
+  },
+  "importBtnTitle": {
+    "message": "Import Outline",
+    "description": "Tooltip for import button"
+  },
+  "exportBtn": {
+    "message": "Export",
+    "description": "Export button label"
+  },
+  "exportBtnTitle": {
+    "message": "Export Outline",
+    "description": "Tooltip for export button"
+  },
+  "currentBookLabel": {
+    "message": "Current Book:",
+    "description": "Label before book selector"
+  },
+  "selectBook": {
+    "message": "-- Select Book --",
+    "description": "Placeholder option in book selector"
+  },
+  "goToBookTitle": {
+    "message": "Go to this book in the Bible",
+    "description": "Tooltip for go-to-book arrow button"
+  },
+  "oldTestament": {
+    "message": "Old Testament",
+    "description": "Optgroup label"
+  },
+  "newTestament": {
+    "message": "New Testament",
+    "description": "Optgroup label"
+  },
+  "book_Gen": {
+    "message": "Genesis"
+  },
+  "book_Exod": {
+    "message": "Exodus"
+  },
+  "book_Lev": {
+    "message": "Leviticus"
+  },
+  "book_Num": {
+    "message": "Numbers"
+  },
+  "book_Deut": {
+    "message": "Deuteronomy"
+  },
+  "book_Josh": {
+    "message": "Joshua"
+  },
+  "book_Judg": {
+    "message": "Judges"
+  },
+  "book_Ruth": {
+    "message": "Ruth"
+  },
+  "book_1Sam": {
+    "message": "1 Samuel"
+  },
+  "book_2Sam": {
+    "message": "2 Samuel"
+  },
+  "book_1Kgs": {
+    "message": "1 Kings"
+  },
+  "book_2Kgs": {
+    "message": "2 Kings"
+  },
+  "book_1Chr": {
+    "message": "1 Chronicles"
+  },
+  "book_2Chr": {
+    "message": "2 Chronicles"
+  },
+  "book_Ezra": {
+    "message": "Ezra"
+  },
+  "book_Neh": {
+    "message": "Nehemiah"
+  },
+  "book_Esth": {
+    "message": "Esther"
+  },
+  "book_Job": {
+    "message": "Job"
+  },
+  "book_Ps": {
+    "message": "Psalms"
+  },
+  "book_Prov": {
+    "message": "Proverbs"
+  },
+  "book_Eccl": {
+    "message": "Ecclesiastes"
+  },
+  "book_Song": {
+    "message": "Song of Solomon"
+  },
+  "book_Isa": {
+    "message": "Isaiah"
+  },
+  "book_Jer": {
+    "message": "Jeremiah"
+  },
+  "book_Lam": {
+    "message": "Lamentations"
+  },
+  "book_Ezek": {
+    "message": "Ezekiel"
+  },
+  "book_Dan": {
+    "message": "Daniel"
+  },
+  "book_Hos": {
+    "message": "Hosea"
+  },
+  "book_Joel": {
+    "message": "Joel"
+  },
+  "book_Amos": {
+    "message": "Amos"
+  },
+  "book_Obad": {
+    "message": "Obadiah"
+  },
+  "book_Jonah": {
+    "message": "Jonah"
+  },
+  "book_Mic": {
+    "message": "Micah"
+  },
+  "book_Nah": {
+    "message": "Nahum"
+  },
+  "book_Hab": {
+    "message": "Habakkuk"
+  },
+  "book_Zeph": {
+    "message": "Zephaniah"
+  },
+  "book_Hag": {
+    "message": "Haggai"
+  },
+  "book_Zech": {
+    "message": "Zechariah"
+  },
+  "book_Mal": {
+    "message": "Malachi"
+  },
+  "book_Matt": {
+    "message": "Matthew"
+  },
+  "book_Mark": {
+    "message": "Mark"
+  },
+  "book_Luke": {
+    "message": "Luke"
+  },
+  "book_John": {
+    "message": "John"
+  },
+  "book_Acts": {
+    "message": "Acts"
+  },
+  "book_Rom": {
+    "message": "Romans"
+  },
+  "book_1Cor": {
+    "message": "1 Corinthians"
+  },
+  "book_2Cor": {
+    "message": "2 Corinthians"
+  },
+  "book_Gal": {
+    "message": "Galatians"
+  },
+  "book_Eph": {
+    "message": "Ephesians"
+  },
+  "book_Phil": {
+    "message": "Philippians"
+  },
+  "book_Col": {
+    "message": "Colossians"
+  },
+  "book_1Thess": {
+    "message": "1 Thessalonians"
+  },
+  "book_2Thess": {
+    "message": "2 Thessalonians"
+  },
+  "book_1Tim": {
+    "message": "1 Timothy"
+  },
+  "book_2Tim": {
+    "message": "2 Timothy"
+  },
+  "book_Titus": {
+    "message": "Titus"
+  },
+  "book_Phlm": {
+    "message": "Philemon"
+  },
+  "book_Heb": {
+    "message": "Hebrews"
+  },
+  "book_Jas": {
+    "message": "James"
+  },
+  "book_1Pet": {
+    "message": "1 Peter"
+  },
+  "book_2Pet": {
+    "message": "2 Peter"
+  },
+  "book_1John": {
+    "message": "1 John"
+  },
+  "book_2John": {
+    "message": "2 John"
+  },
+  "book_3John": {
+    "message": "3 John"
+  },
+  "book_Jude": {
+    "message": "Jude"
+  },
+  "book_Rev": {
+    "message": "Revelation"
+  },
+  "dragToReorder": {
+    "message": "Drag headings to reorder",
+    "description": "Reorder mode hint text"
+  },
+  "saveOrder": {
+    "message": "Save Order",
+    "description": "Confirm reorder button"
+  },
+  "cancelReorder": {
+    "message": "Cancel",
+    "description": "Cancel reorder button"
+  },
+  "noHeadingsYet": {
+    "message": "No headings yet",
+    "description": "Empty state message"
+  },
+  "emptyStateHint": {
+    "message": "Click \"Add Heading\" or click a verse at StepBible.org",
+    "description": "Empty state hint"
+  },
+  "settingsLabel": {
+    "message": "Settings",
+    "description": "Settings toggle button"
+  },
+  "settingsLanguage": {
+    "message": "Language:",
+    "description": "Language selector label"
+  },
+  "colorScheme": {
+    "message": "Color scheme:",
+    "description": "Color scheme selector label"
+  },
+  "themeDefault": {
+    "message": "Default",
+    "description": "Default theme button"
+  },
+  "themeGray": {
+    "message": "Gray",
+    "description": "Gray theme button"
+  },
+  "themeBlue": {
+    "message": "Blue",
+    "description": "Blue theme button"
+  },
+  "headingColors": {
+    "message": "Heading colors:",
+    "description": "Palette picker label"
+  },
+  "downloadsSubfolder": {
+    "message": "Downloads subfolder:",
+    "description": "Backup subfolder label"
+  },
+  "backupNow": {
+    "message": "Backup Now",
+    "description": "Backup trigger button"
+  },
+  "googleDriveBackup": {
+    "message": "Google Drive backup",
+    "description": "Drive section label"
+  },
+  "driveConnect": {
+    "message": "Connect",
+    "description": "Drive connect button"
+  },
+  "driveDisconnect": {
+    "message": "Disconnect",
+    "description": "Drive disconnect button"
+  },
+  "palette_default": {
+    "message": "Default"
+  },
+  "palette_gray": {
+    "message": "Gray"
+  },
+  "palette_red": {
+    "message": "Red"
+  },
+  "palette_pink": {
+    "message": "Pink"
+  },
+  "palette_grape": {
+    "message": "Grape"
+  },
+  "palette_violet": {
+    "message": "Violet"
+  },
+  "palette_indigo": {
+    "message": "Indigo"
+  },
+  "palette_blue": {
+    "message": "Blue"
+  },
+  "palette_cyan": {
+    "message": "Cyan"
+  },
+  "palette_teal": {
+    "message": "Teal"
+  },
+  "palette_green": {
+    "message": "Green"
+  },
+  "palette_lime": {
+    "message": "Lime"
+  },
+  "palette_yellow": {
+    "message": "Yellow"
+  },
+  "palette_orange": {
+    "message": "Orange"
+  },
+  "addHeadingModal": {
+    "message": "Add Heading",
+    "description": "Modal title when adding"
+  },
+  "editHeadingModal": {
+    "message": "Edit Heading",
+    "description": "Modal title when editing"
+  },
+  "bookLabel": {
+    "message": "Book",
+    "description": "Book field label"
+  },
+  "chapterLabel": {
+    "message": "Chapter",
+    "description": "Chapter field label"
+  },
+  "verseLabel": {
+    "message": "Verse",
+    "description": "Verse field label"
+  },
+  "midVerse": {
+    "message": "Mid-verse",
+    "description": "Mid-verse checkbox label"
+  },
+  "midVerseHint": {
+    "message": "(appends \"b\" to verse reference)",
+    "description": "Mid-verse hint"
+  },
+  "headingLevel": {
+    "message": "Heading Level",
+    "description": "Level selector label"
+  },
+  "headingTextLabel": {
+    "message": "Heading Text",
+    "description": "Heading text field label"
+  },
+  "headingTextPlaceholder": {
+    "message": "Enter heading text",
+    "description": "Heading text placeholder"
+  },
+  "notesLabel": {
+    "message": "Notes",
+    "description": "Notes field label"
+  },
+  "notesPlaceholder": {
+    "message": "Optional notes…",
+    "description": "Notes placeholder"
+  },
+  "saveHeading": {
+    "message": "Save Heading",
+    "description": "Save button in modal"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel button"
+  },
+  "exportOutline": {
+    "message": "Export Outline",
+    "description": "Export modal title"
+  },
+  "entireOutline": {
+    "message": "Entire outline",
+    "description": "Export scope radio"
+  },
+  "currentBookOnly": {
+    "message": "Current book only",
+    "description": "Export scope radio"
+  },
+  "copyClipboard": {
+    "message": "Copy to Clipboard",
+    "description": "Clipboard export button"
+  },
+  "exportMarkdown": {
+    "message": "Export as Markdown",
+    "description": "Markdown export button"
+  },
+  "exportHtml": {
+    "message": "Export as HTML",
+    "description": "HTML export button"
+  },
+  "exportXml": {
+    "message": "Export as XML",
+    "description": "XML export button"
+  },
+  "exportJson": {
+    "message": "Export as JSON",
+    "description": "JSON export button"
+  },
+  "exportWord": {
+    "message": "Export as Word (.docx)",
+    "description": "DOCX export button"
+  },
+  "exportOdt": {
+    "message": "Export as LibreOffice (.odt)",
+    "description": "ODT export button"
+  },
+  "exportPdf": {
+    "message": "Export as PDF",
+    "description": "PDF export button"
+  },
+  "copiedConfirm": {
+    "message": "Copied!",
+    "description": "Clipboard success feedback"
+  },
+  "copyFailed": {
+    "message": "Copy failed",
+    "description": "Clipboard error feedback"
+  },
+  "importOutline": {
+    "message": "Import Outline",
+    "description": "Import modal title"
+  },
+  "importInstructions": {
+    "message": "Import a previously exported JSON file to restore your outline. This will add the headings to your current database.",
+    "description": "Import modal instructions"
+  },
+  "chooseJsonFile": {
+    "message": "Choose JSON File",
+    "description": "Import file button"
+  },
+  "fillInAllFields": {
+    "message": "Please fill in all fields",
+    "description": "Validation alert"
+  },
+  "confirmDelete": {
+    "message": "Are you sure you want to delete this heading?",
+    "description": "Delete confirmation"
+  },
+  "errorSaving": {
+    "message": "Error saving heading: $1",
+    "description": "Save error alert"
+  },
+  "errorDeleting": {
+    "message": "Error deleting heading. Please try again.",
+    "description": "Delete error alert"
+  },
+  "errorSavingOrder": {
+    "message": "Error saving order: $1",
+    "description": "Reorder error alert"
+  },
+  "errorExporting": {
+    "message": "Error exporting outline: $1",
+    "description": "Export error alert"
+  },
+  "readingFile": {
+    "message": "Reading file…",
+    "description": "Import progress: reading"
+  },
+  "invalidJson": {
+    "message": "Invalid JSON format. Expected an array.",
+    "description": "Import validation error"
+  },
+  "importProgress": {
+    "message": "Importing $1 heading(s)…",
+    "description": "Import progress with count"
+  },
+  "importSuccess": {
+    "message": "✓ Successfully imported $1 heading(s)",
+    "description": "Import success"
+  },
+  "importSuccessSkipped": {
+    "message": "✓ Successfully imported $1 heading(s), $2 skipped (duplicates)",
+    "description": "Import success with skipped count"
+  },
+  "importSuccessWithSkipped": {
+    "message": "✓ Successfully imported $1 heading(s) ($2 skipped)",
+    "description": "Import success with skipped"
+  },
+  "importError": {
+    "message": "✗ Error: $1",
+    "description": "Import error"
+  },
+  "backingUp": {
+    "message": "Backing up…",
+    "description": "Backup in progress"
+  },
+  "backupLocalSuccess": {
+    "message": "Local ✓",
+    "description": "Local backup success"
+  },
+  "backupLocalFailed": {
+    "message": "Local: $1",
+    "description": "Local backup failure with reason"
+  },
+  "backupDriveFailed": {
+    "message": "Drive: $1",
+    "description": "Drive backup failure with reason"
+  },
+  "backupNoChange": {
+    "message": "No changes since last backup ($1)",
+    "description": "No-change message with date"
+  },
+  "backupFailed": {
+    "message": "Backup failed: $1",
+    "description": "Backup failure"
+  },
+  "backupDriveNotSignedIn": {
+    "message": "Drive: not signed in",
+    "description": "Drive not authenticated"
+  },
+  "driveConnecting": {
+    "message": "Connecting…",
+    "description": "Drive connecting"
+  },
+  "driveConnectedBacking": {
+    "message": "Connected as $1 — backing up…",
+    "description": "Drive connected, backing up"
+  },
+  "driveConnectedSuccess": {
+    "message": "Connected as $1 · Drive ✓",
+    "description": "Drive connected success"
+  },
+  "driveConnectionFailed": {
+    "message": "Connection failed: $1",
+    "description": "Drive connection error"
+  },
+  "driveDisconnecting": {
+    "message": "Disconnecting…",
+    "description": "Drive disconnecting"
+  },
+  "driveDisconnected": {
+    "message": "Disconnected",
+    "description": "Drive disconnected"
+  },
+  "driveError": {
+    "message": "Error: $1",
+    "description": "Drive generic error"
+  },
+  "driveSuccess": {
+    "message": "Drive ✓",
+    "description": "Drive backup success"
+  },
+  "exportDocTitle": {
+    "message": "Bible Outline",
+    "description": "Title used in exported documents"
+  },
+  "exportGeneratedOn": {
+    "message": "Generated on $1",
+    "description": "Generated-on line in exported documents"
+  }
 }

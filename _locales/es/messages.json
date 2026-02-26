@@ -1,159 +1,521 @@
 {
-  "appName":               { "message": "Delineador B\u00edblico" },
-  "appDescription":        { "message": "Cree esquemas jer\u00e1rquicos de libros b\u00edblicos con navegaci\u00f3n en panel lateral" },
-  "togglePanel":           { "message": "Alternar panel del Delineador B\u00edblico" },
-
-  "addHeading":            { "message": "Agregar t\u00edtulo" },
-  "addHeadingTitle":       { "message": "Agregar nuevo t\u00edtulo" },
-  "reorder":               { "message": "Reordenar" },
-  "reorderTitle":          { "message": "Reordenar t\u00edtulos" },
-  "importBtn":             { "message": "Importar" },
-  "importBtnTitle":        { "message": "Importar esquema" },
-  "exportBtn":             { "message": "Exportar" },
-  "exportBtnTitle":        { "message": "Exportar esquema" },
-
-  "currentBookLabel":      { "message": "Libro actual:" },
-  "selectBook":            { "message": "-- Seleccionar libro --" },
-  "goToBookTitle":         { "message": "Ir a este libro en la Biblia" },
-
-  "oldTestament":          { "message": "Antiguo Testamento" },
-  "newTestament":          { "message": "Nuevo Testamento" },
-
-  "book_Gen":   { "message": "G\u00e9nesis" },       "book_Exod":  { "message": "\u00c9xodo" },
-  "book_Lev":   { "message": "Lev\u00edtico" },      "book_Num":   { "message": "N\u00fameros" },
-  "book_Deut":  { "message": "Deuteronomio" },        "book_Josh":  { "message": "Josu\u00e9" },
-  "book_Judg":  { "message": "Jueces" },              "book_Ruth":  { "message": "Rut" },
-  "book_1Sam":  { "message": "1 Samuel" },            "book_2Sam":  { "message": "2 Samuel" },
-  "book_1Kgs":  { "message": "1 Reyes" },             "book_2Kgs":  { "message": "2 Reyes" },
-  "book_1Chr":  { "message": "1 Cr\u00f3nicas" },     "book_2Chr":  { "message": "2 Cr\u00f3nicas" },
-  "book_Ezra":  { "message": "Esdras" },              "book_Neh":   { "message": "Nehem\u00edas" },
-  "book_Esth":  { "message": "Ester" },               "book_Job":   { "message": "Job" },
-  "book_Ps":    { "message": "Salmos" },              "book_Prov":  { "message": "Proverbios" },
-  "book_Eccl":  { "message": "Eclesiast\u00e9s" },   "book_Song":  { "message": "Cantares" },
-  "book_Isa":   { "message": "Isa\u00edas" },         "book_Jer":   { "message": "Jerem\u00edas" },
-  "book_Lam":   { "message": "Lamentaciones" },       "book_Ezek":  { "message": "Ezequiel" },
-  "book_Dan":   { "message": "Daniel" },              "book_Hos":   { "message": "Oseas" },
-  "book_Joel":  { "message": "Joel" },                "book_Amos":  { "message": "Am\u00f3s" },
-  "book_Obad":  { "message": "Abd\u00edas" },         "book_Jonah": { "message": "Jon\u00e1s" },
-  "book_Mic":   { "message": "Miqueas" },             "book_Nah":   { "message": "Nah\u00fam" },
-  "book_Hab":   { "message": "Habacuc" },             "book_Zeph":  { "message": "Sofon\u00edas" },
-  "book_Hag":   { "message": "Hageo" },               "book_Zech":  { "message": "Zacar\u00edas" },
-  "book_Mal":   { "message": "Malaqu\u00edas" },
-  "book_Matt":  { "message": "Mateo" },               "book_Mark":  { "message": "Marcos" },
-  "book_Luke":  { "message": "Lucas" },               "book_John":  { "message": "Juan" },
-  "book_Acts":  { "message": "Hechos" },              "book_Rom":   { "message": "Romanos" },
-  "book_1Cor":  { "message": "1 Corintios" },         "book_2Cor":  { "message": "2 Corintios" },
-  "book_Gal":   { "message": "G\u00e1latas" },        "book_Eph":   { "message": "Efesios" },
-  "book_Phil":  { "message": "Filipenses" },          "book_Col":   { "message": "Colosenses" },
-  "book_1Thess":{ "message": "1 Tesalonicenses" },    "book_2Thess":{ "message": "2 Tesalonicenses" },
-  "book_1Tim":  { "message": "1 Timoteo" },           "book_2Tim":  { "message": "2 Timoteo" },
-  "book_Titus": { "message": "Tito" },                "book_Phlm":  { "message": "Filem\u00f3n" },
-  "book_Heb":   { "message": "Hebreos" },             "book_Jas":   { "message": "Santiago" },
-  "book_1Pet":  { "message": "1 Pedro" },             "book_2Pet":  { "message": "2 Pedro" },
-  "book_1John": { "message": "1 Juan" },              "book_2John": { "message": "2 Juan" },
-  "book_3John": { "message": "3 Juan" },              "book_Jude":  { "message": "Judas" },
-  "book_Rev":   { "message": "Apocalipsis" },
-
-  "dragToReorder": { "message": "Arrastre los t\u00edtulos para reordenar" },
-  "saveOrder":     { "message": "Guardar orden" },
-  "cancelReorder": { "message": "Cancelar" },
-
-  "noHeadingsYet": { "message": "A\u00fan no hay t\u00edtulos" },
-  "emptyStateHint":{ "message": "Haga clic en \u201cAgregar t\u00edtulo\u201d o en un vers\u00edculo en StepBible.org" },
-
-  "settingsLabel":      { "message": "Configuraci\u00f3n" },
-  "settingsLanguage":   { "message": "Idioma:" },
-  "colorScheme":        { "message": "Esquema de color:" },
-  "themeDefault":       { "message": "Por defecto" },
-  "themeGray":          { "message": "Gris" },
-  "themeBlue":          { "message": "Azul" },
-  "headingColors":      { "message": "Colores de t\u00edtulos:" },
-  "downloadsSubfolder": { "message": "Subcarpeta de descargas:" },
-  "backupNow":          { "message": "Hacer copia ahora" },
-  "googleDriveBackup":  { "message": "Copia de seguridad en Google Drive" },
-  "driveConnect":       { "message": "Conectar" },
-  "driveDisconnect":    { "message": "Desconectar" },
-
-  "palette_default": { "message": "Por defecto" },
-  "palette_gray":    { "message": "Gris" },
-  "palette_red":     { "message": "Rojo" },
-  "palette_pink":    { "message": "Rosa" },
-  "palette_grape":   { "message": "Uva" },
-  "palette_violet":  { "message": "Violeta" },
-  "palette_indigo":  { "message": "\u00cdndigo" },
-  "palette_blue":    { "message": "Azul" },
-  "palette_cyan":    { "message": "Cian" },
-  "palette_teal":    { "message": "Cerceta" },
-  "palette_green":   { "message": "Verde" },
-  "palette_lime":    { "message": "Lima" },
-  "palette_yellow":  { "message": "Amarillo" },
-  "palette_orange":  { "message": "Naranja" },
-
-  "addHeadingModal":        { "message": "Agregar t\u00edtulo" },
-  "editHeadingModal":       { "message": "Editar t\u00edtulo" },
-  "bookLabel":              { "message": "Libro" },
-  "chapterLabel":           { "message": "Cap\u00edtulo" },
-  "verseLabel":             { "message": "Vers\u00edculo" },
-  "midVerse":               { "message": "Mitad del vers\u00edculo" },
-  "midVerseHint":           { "message": "(agrega \u201cb\u201d a la referencia del vers\u00edculo)" },
-  "headingLevel":           { "message": "Nivel de t\u00edtulo" },
-  "headingTextLabel":       { "message": "Texto del t\u00edtulo" },
-  "headingTextPlaceholder": { "message": "Ingrese el texto del t\u00edtulo" },
-  "notesLabel":             { "message": "Notas" },
-  "notesPlaceholder":       { "message": "Notas opcionales\u2026" },
-  "saveHeading":            { "message": "Guardar t\u00edtulo" },
-  "cancel":                 { "message": "Cancelar" },
-
-  "exportOutline":    { "message": "Exportar esquema" },
-  "entireOutline":    { "message": "Esquema completo" },
-  "currentBookOnly":  { "message": "Solo el libro actual" },
-  "copyClipboard":    { "message": "Copiar al portapapeles" },
-  "exportMarkdown":   { "message": "Exportar como Markdown" },
-  "exportHtml":       { "message": "Exportar como HTML" },
-  "exportXml":        { "message": "Exportar como XML" },
-  "exportJson":       { "message": "Exportar como JSON" },
-  "exportWord":       { "message": "Exportar como Word (.docx)" },
-  "exportOdt":        { "message": "Exportar como LibreOffice (.odt)" },
-  "exportPdf":        { "message": "Exportar como PDF" },
-  "copiedConfirm":    { "message": "\u00a1Copiado!" },
-  "copyFailed":       { "message": "Error al copiar" },
-
-  "importOutline":      { "message": "Importar esquema" },
-  "importInstructions": { "message": "Importe un archivo JSON exportado previamente para restaurar su esquema. Esto agregar\u00e1 los t\u00edtulos a su base de datos actual." },
-  "chooseJsonFile":     { "message": "Seleccionar archivo JSON" },
-
-  "fillInAllFields":  { "message": "Complete todos los campos" },
-  "confirmDelete":    { "message": "\u00bfEst\u00e1 seguro de que desea eliminar este t\u00edtulo?" },
-  "errorSaving":      { "message": "Error al guardar el t\u00edtulo: $1" },
-  "errorDeleting":    { "message": "Error al eliminar el t\u00edtulo. Int\u00e9ntelo de nuevo." },
-  "errorSavingOrder": { "message": "Error al guardar el orden: $1" },
-  "errorExporting":   { "message": "Error al exportar el esquema: $1" },
-
-  "readingFile":       { "message": "Leyendo archivo\u2026" },
-  "invalidJson":       { "message": "Formato JSON no v\u00e1lido. Se esperaba una lista." },
-  "importProgress":    { "message": "Importando $1 t\u00edtulo(s)\u2026" },
-  "importSuccess":     { "message": "\u2713 Se importaron correctamente $1 t\u00edtulo(s)" },
-  "importSuccessSkipped": { "message": "\u2713 Se importaron $1 t\u00edtulo(s), $2 omitido(s) (duplicados)" },
-  "importSuccessWithSkipped": { "message": "\u2713 Se importaron $1 t\u00edtulo(s) ($2 omitidos)" },
-  "importError":       { "message": "\u2717 Error: $1" },
-
-  "backingUp":             { "message": "Realizando copia de seguridad\u2026" },
-  "backupLocalSuccess":    { "message": "Local \u2713" },
-  "backupLocalFailed":     { "message": "Local: $1" },
-  "backupDriveFailed":     { "message": "Drive: $1" },
-  "backupNoChange":        { "message": "Sin cambios desde la \u00faltima copia ($1)" },
-  "backupFailed":          { "message": "Copia fallida: $1" },
-  "backupDriveNotSignedIn":{ "message": "Drive: no ha iniciado sesi\u00f3n" },
-
-  "driveConnecting":       { "message": "Conectando\u2026" },
-  "driveConnectedBacking": { "message": "Conectado como $1 \u2014 respaldando\u2026" },
-  "driveConnectedSuccess": { "message": "Conectado como $1 \u00b7 Drive \u2713" },
-  "driveConnectionFailed": { "message": "Error de conexi\u00f3n: $1" },
-  "driveDisconnecting":    { "message": "Desconectando\u2026" },
-  "driveDisconnected":     { "message": "Desconectado" },
-  "driveError":            { "message": "Error: $1" },
-  "driveSuccess":          { "message": "Drive \u2713" },
-
-  "exportDocTitle":    { "message": "Esquema B\u00edblico" },
-  "exportGeneratedOn": { "message": "Generado el $1" }
+  "appName": {
+    "message": "Delineador Bíblico"
+  },
+  "appDescription": {
+    "message": "Cree esquemas jerárquicos de libros bíblicos con navegación en panel lateral"
+  },
+  "togglePanel": {
+    "message": "Alternar panel del Delineador Bíblico"
+  },
+  "addHeading": {
+    "message": "Agregar título"
+  },
+  "addHeadingTitle": {
+    "message": "Agregar nuevo título"
+  },
+  "reorder": {
+    "message": "Reordenar"
+  },
+  "reorderTitle": {
+    "message": "Reordenar títulos"
+  },
+  "importBtn": {
+    "message": "Importar"
+  },
+  "importBtnTitle": {
+    "message": "Importar esquema"
+  },
+  "exportBtn": {
+    "message": "Exportar"
+  },
+  "exportBtnTitle": {
+    "message": "Exportar esquema"
+  },
+  "currentBookLabel": {
+    "message": "Libro actual:"
+  },
+  "selectBook": {
+    "message": "-- Seleccionar libro --"
+  },
+  "goToBookTitle": {
+    "message": "Ir a este libro en la Biblia"
+  },
+  "oldTestament": {
+    "message": "Antiguo Testamento"
+  },
+  "newTestament": {
+    "message": "Nuevo Testamento"
+  },
+  "book_Gen": {
+    "message": "Génesis"
+  },
+  "book_Exod": {
+    "message": "Éxodo"
+  },
+  "book_Lev": {
+    "message": "Levítico"
+  },
+  "book_Num": {
+    "message": "Números"
+  },
+  "book_Deut": {
+    "message": "Deuteronomio"
+  },
+  "book_Josh": {
+    "message": "Josué"
+  },
+  "book_Judg": {
+    "message": "Jueces"
+  },
+  "book_Ruth": {
+    "message": "Rut"
+  },
+  "book_1Sam": {
+    "message": "1 Samuel"
+  },
+  "book_2Sam": {
+    "message": "2 Samuel"
+  },
+  "book_1Kgs": {
+    "message": "1 Reyes"
+  },
+  "book_2Kgs": {
+    "message": "2 Reyes"
+  },
+  "book_1Chr": {
+    "message": "1 Crónicas"
+  },
+  "book_2Chr": {
+    "message": "2 Crónicas"
+  },
+  "book_Ezra": {
+    "message": "Esdras"
+  },
+  "book_Neh": {
+    "message": "Nehemías"
+  },
+  "book_Esth": {
+    "message": "Ester"
+  },
+  "book_Job": {
+    "message": "Job"
+  },
+  "book_Ps": {
+    "message": "Salmos"
+  },
+  "book_Prov": {
+    "message": "Proverbios"
+  },
+  "book_Eccl": {
+    "message": "Eclesiastés"
+  },
+  "book_Song": {
+    "message": "Cantares"
+  },
+  "book_Isa": {
+    "message": "Isaías"
+  },
+  "book_Jer": {
+    "message": "Jeremías"
+  },
+  "book_Lam": {
+    "message": "Lamentaciones"
+  },
+  "book_Ezek": {
+    "message": "Ezequiel"
+  },
+  "book_Dan": {
+    "message": "Daniel"
+  },
+  "book_Hos": {
+    "message": "Oseas"
+  },
+  "book_Joel": {
+    "message": "Joel"
+  },
+  "book_Amos": {
+    "message": "Amós"
+  },
+  "book_Obad": {
+    "message": "Abdías"
+  },
+  "book_Jonah": {
+    "message": "Jonás"
+  },
+  "book_Mic": {
+    "message": "Miqueas"
+  },
+  "book_Nah": {
+    "message": "Nahúm"
+  },
+  "book_Hab": {
+    "message": "Habacuc"
+  },
+  "book_Zeph": {
+    "message": "Sofonías"
+  },
+  "book_Hag": {
+    "message": "Hageo"
+  },
+  "book_Zech": {
+    "message": "Zacarías"
+  },
+  "book_Mal": {
+    "message": "Malaquías"
+  },
+  "book_Matt": {
+    "message": "Mateo"
+  },
+  "book_Mark": {
+    "message": "Marcos"
+  },
+  "book_Luke": {
+    "message": "Lucas"
+  },
+  "book_John": {
+    "message": "Juan"
+  },
+  "book_Acts": {
+    "message": "Hechos"
+  },
+  "book_Rom": {
+    "message": "Romanos"
+  },
+  "book_1Cor": {
+    "message": "1 Corintios"
+  },
+  "book_2Cor": {
+    "message": "2 Corintios"
+  },
+  "book_Gal": {
+    "message": "Gálatas"
+  },
+  "book_Eph": {
+    "message": "Efesios"
+  },
+  "book_Phil": {
+    "message": "Filipenses"
+  },
+  "book_Col": {
+    "message": "Colosenses"
+  },
+  "book_1Thess": {
+    "message": "1 Tesalonicenses"
+  },
+  "book_2Thess": {
+    "message": "2 Tesalonicenses"
+  },
+  "book_1Tim": {
+    "message": "1 Timoteo"
+  },
+  "book_2Tim": {
+    "message": "2 Timoteo"
+  },
+  "book_Titus": {
+    "message": "Tito"
+  },
+  "book_Phlm": {
+    "message": "Filemón"
+  },
+  "book_Heb": {
+    "message": "Hebreos"
+  },
+  "book_Jas": {
+    "message": "Santiago"
+  },
+  "book_1Pet": {
+    "message": "1 Pedro"
+  },
+  "book_2Pet": {
+    "message": "2 Pedro"
+  },
+  "book_1John": {
+    "message": "1 Juan"
+  },
+  "book_2John": {
+    "message": "2 Juan"
+  },
+  "book_3John": {
+    "message": "3 Juan"
+  },
+  "book_Jude": {
+    "message": "Judas"
+  },
+  "book_Rev": {
+    "message": "Apocalipsis"
+  },
+  "dragToReorder": {
+    "message": "Arrastre los títulos para reordenar"
+  },
+  "saveOrder": {
+    "message": "Guardar orden"
+  },
+  "cancelReorder": {
+    "message": "Cancelar"
+  },
+  "noHeadingsYet": {
+    "message": "Aún no hay títulos"
+  },
+  "emptyStateHint": {
+    "message": "Haga clic en “Agregar título” o en un versículo en StepBible.org"
+  },
+  "settingsLabel": {
+    "message": "Configuración"
+  },
+  "settingsLanguage": {
+    "message": "Idioma:"
+  },
+  "colorScheme": {
+    "message": "Esquema de color:"
+  },
+  "themeDefault": {
+    "message": "Por defecto"
+  },
+  "themeGray": {
+    "message": "Gris"
+  },
+  "themeBlue": {
+    "message": "Azul"
+  },
+  "headingColors": {
+    "message": "Colores de títulos:"
+  },
+  "downloadsSubfolder": {
+    "message": "Subcarpeta de descargas:"
+  },
+  "backupNow": {
+    "message": "Hacer copia ahora"
+  },
+  "googleDriveBackup": {
+    "message": "Copia de seguridad en Google Drive"
+  },
+  "driveConnect": {
+    "message": "Conectar"
+  },
+  "driveDisconnect": {
+    "message": "Desconectar"
+  },
+  "palette_default": {
+    "message": "Por defecto"
+  },
+  "palette_gray": {
+    "message": "Gris"
+  },
+  "palette_red": {
+    "message": "Rojo"
+  },
+  "palette_pink": {
+    "message": "Rosa"
+  },
+  "palette_grape": {
+    "message": "Uva"
+  },
+  "palette_violet": {
+    "message": "Violeta"
+  },
+  "palette_indigo": {
+    "message": "Índigo"
+  },
+  "palette_blue": {
+    "message": "Azul"
+  },
+  "palette_cyan": {
+    "message": "Cian"
+  },
+  "palette_teal": {
+    "message": "Cerceta"
+  },
+  "palette_green": {
+    "message": "Verde"
+  },
+  "palette_lime": {
+    "message": "Lima"
+  },
+  "palette_yellow": {
+    "message": "Amarillo"
+  },
+  "palette_orange": {
+    "message": "Naranja"
+  },
+  "addHeadingModal": {
+    "message": "Agregar título"
+  },
+  "editHeadingModal": {
+    "message": "Editar título"
+  },
+  "bookLabel": {
+    "message": "Libro"
+  },
+  "chapterLabel": {
+    "message": "Capítulo"
+  },
+  "verseLabel": {
+    "message": "Versículo"
+  },
+  "midVerse": {
+    "message": "Mitad del versículo"
+  },
+  "midVerseHint": {
+    "message": "(agrega “b” a la referencia del versículo)"
+  },
+  "headingLevel": {
+    "message": "Nivel de título"
+  },
+  "headingTextLabel": {
+    "message": "Texto del título"
+  },
+  "headingTextPlaceholder": {
+    "message": "Ingrese el texto del título"
+  },
+  "notesLabel": {
+    "message": "Notas"
+  },
+  "notesPlaceholder": {
+    "message": "Notas opcionales…"
+  },
+  "saveHeading": {
+    "message": "Guardar título"
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "exportOutline": {
+    "message": "Exportar esquema"
+  },
+  "entireOutline": {
+    "message": "Esquema completo"
+  },
+  "currentBookOnly": {
+    "message": "Solo el libro actual"
+  },
+  "copyClipboard": {
+    "message": "Copiar al portapapeles"
+  },
+  "exportMarkdown": {
+    "message": "Exportar como Markdown"
+  },
+  "exportHtml": {
+    "message": "Exportar como HTML"
+  },
+  "exportXml": {
+    "message": "Exportar como XML"
+  },
+  "exportJson": {
+    "message": "Exportar como JSON"
+  },
+  "exportWord": {
+    "message": "Exportar como Word (.docx)"
+  },
+  "exportOdt": {
+    "message": "Exportar como LibreOffice (.odt)"
+  },
+  "exportPdf": {
+    "message": "Exportar como PDF"
+  },
+  "copiedConfirm": {
+    "message": "¡Copiado!"
+  },
+  "copyFailed": {
+    "message": "Error al copiar"
+  },
+  "importOutline": {
+    "message": "Importar esquema"
+  },
+  "importInstructions": {
+    "message": "Importe un archivo JSON exportado previamente para restaurar su esquema. Esto agregará los títulos a su base de datos actual."
+  },
+  "chooseJsonFile": {
+    "message": "Seleccionar archivo JSON"
+  },
+  "fillInAllFields": {
+    "message": "Complete todos los campos"
+  },
+  "confirmDelete": {
+    "message": "¿Está seguro de que desea eliminar este título?"
+  },
+  "errorSaving": {
+    "message": "Error al guardar el título: $1"
+  },
+  "errorDeleting": {
+    "message": "Error al eliminar el título. Inténtelo de nuevo."
+  },
+  "errorSavingOrder": {
+    "message": "Error al guardar el orden: $1"
+  },
+  "errorExporting": {
+    "message": "Error al exportar el esquema: $1"
+  },
+  "readingFile": {
+    "message": "Leyendo archivo…"
+  },
+  "invalidJson": {
+    "message": "Formato JSON no válido. Se esperaba una lista."
+  },
+  "importProgress": {
+    "message": "Importando $1 título(s)…"
+  },
+  "importSuccess": {
+    "message": "✓ Se importaron correctamente $1 título(s)"
+  },
+  "importSuccessSkipped": {
+    "message": "✓ Se importaron $1 título(s), $2 omitido(s) (duplicados)"
+  },
+  "importSuccessWithSkipped": {
+    "message": "✓ Se importaron $1 título(s) ($2 omitidos)"
+  },
+  "importError": {
+    "message": "✗ Error: $1"
+  },
+  "backingUp": {
+    "message": "Realizando copia de seguridad…"
+  },
+  "backupLocalSuccess": {
+    "message": "Local ✓"
+  },
+  "backupLocalFailed": {
+    "message": "Local: $1"
+  },
+  "backupDriveFailed": {
+    "message": "Drive: $1"
+  },
+  "backupNoChange": {
+    "message": "Sin cambios desde la última copia ($1)"
+  },
+  "backupFailed": {
+    "message": "Copia fallida: $1"
+  },
+  "backupDriveNotSignedIn": {
+    "message": "Drive: no ha iniciado sesión"
+  },
+  "driveConnecting": {
+    "message": "Conectando…"
+  },
+  "driveConnectedBacking": {
+    "message": "Conectado como $1 — respaldando…"
+  },
+  "driveConnectedSuccess": {
+    "message": "Conectado como $1 · Drive ✓"
+  },
+  "driveConnectionFailed": {
+    "message": "Error de conexión: $1"
+  },
+  "driveDisconnecting": {
+    "message": "Desconectando…"
+  },
+  "driveDisconnected": {
+    "message": "Desconectado"
+  },
+  "driveError": {
+    "message": "Error: $1"
+  },
+  "driveSuccess": {
+    "message": "Drive ✓"
+  },
+  "exportDocTitle": {
+    "message": "Esquema Bíblico"
+  },
+  "exportGeneratedOn": {
+    "message": "Generado el $1"
+  }
 }

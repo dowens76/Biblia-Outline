@@ -1,159 +1,521 @@
 {
-  "appName":               { "message": "Tr\u00ecnh ph\u00e1c th\u1ea3o Kinh Th\u00e1nh" },
-  "appDescription":        { "message": "T\u1ea1o c\u00e1c ph\u00e1c th\u1ea3o ph\u00e2n c\u1ea5p cho c\u00e1c s\u00e1ch trong Kinh Th\u00e1nh v\u1edbi b\u1ea3ng \u0111i\u1ec1u h\u01b0\u1edbng b\u00ean c\u1ea1nh" },
-  "togglePanel":           { "message": "Hi\u1ec7n/\u1ea8n b\u1ea3ng Tr\u00ecnh ph\u00e1c th\u1ea3o Kinh Th\u00e1nh" },
-
-  "addHeading":            { "message": "Th\u00eam ti\u00eau \u0111\u1ec1" },
-  "addHeadingTitle":       { "message": "Th\u00eam ti\u00eau \u0111\u1ec1 m\u1edbi" },
-  "reorder":               { "message": "S\u1eafp x\u1ebfp l\u1ea1i" },
-  "reorderTitle":          { "message": "S\u1eafp x\u1ebfp l\u1ea1i c\u00e1c ti\u00eau \u0111\u1ec1" },
-  "importBtn":             { "message": "Nh\u1eadp" },
-  "importBtnTitle":        { "message": "Nh\u1eadp ph\u00e1c th\u1ea3o" },
-  "exportBtn":             { "message": "Xu\u1ea5t" },
-  "exportBtnTitle":        { "message": "Xu\u1ea5t ph\u00e1c th\u1ea3o" },
-
-  "currentBookLabel":      { "message": "S\u00e1ch hi\u1ec7n t\u1ea1i:" },
-  "selectBook":            { "message": "-- Ch\u1ecdn s\u00e1ch --" },
-  "goToBookTitle":         { "message": "Chuy\u1ec3n \u0111\u1ebfn s\u00e1ch n\u00e0y trong Kinh Th\u00e1nh" },
-
-  "oldTestament":          { "message": "C\u1ef1u \u01af\u1edbc" },
-  "newTestament":          { "message": "T\u00e2n \u01af\u1edbc" },
-
-  "book_Gen":   { "message": "S\u00e1ng Th\u1ebf K\u00fd" },         "book_Exod":  { "message": "Xu\u1ea5t \u00c1i C\u1eadp K\u00fd" },
-  "book_Lev":   { "message": "L\u00ea Vi K\u00fd" },                "book_Num":   { "message": "D\u00e2n S\u1ed1 K\u00fd" },
-  "book_Deut":  { "message": "Ph\u1ee5c Truy\u1ec1n Lu\u1eadt L\u1ec7 K\u00fd" }, "book_Josh":  { "message": "Gi\u00f4-su\u00ea" },
-  "book_Judg":  { "message": "C\u00e1c Quan X\u00e9t" },             "book_Ruth":  { "message": "Ru-t\u01a1" },
-  "book_1Sam":  { "message": "I Sa-mu-\u00ean" },                    "book_2Sam":  { "message": "II Sa-mu-\u00ean" },
-  "book_1Kgs":  { "message": "I C\u00e1c Vua" },                    "book_2Kgs":  { "message": "II C\u00e1c Vua" },
-  "book_1Chr":  { "message": "I S\u1eed K\u00fd" },                  "book_2Chr":  { "message": "II S\u1eed K\u00fd" },
-  "book_Ezra":  { "message": "E-xra" },                              "book_Neh":   { "message": "N\u00ea-h\u00ea-mi" },
-  "book_Esth":  { "message": "E-xte" },                              "book_Job":   { "message": "Gióp" },
-  "book_Ps":    { "message": "Thi Thi\u00ean" },                    "book_Prov":  { "message": "Ch\u00e2m Ng\u00f4n" },
-  "book_Eccl":  { "message": "Truy\u1ec7n \u0110\u1ea1o" },         "book_Song":  { "message": "Nh\u00e3 Ca" },
-  "book_Isa":   { "message": "\u00ca-sai" },                         "book_Jer":   { "message": "Gi\u00ea-r\u00ea-mi" },
-  "book_Lam":   { "message": "Ai Ca" },                              "book_Ezek":  { "message": "\u00ca-x\u00ea-chi-\u00ean" },
-  "book_Dan":   { "message": "\u0110a-ni-\u00ean" },                "book_Hos":   { "message": "H\u00f4-s\u00ea" },
-  "book_Joel":  { "message": "Gi-\u00f4-\u00ean" },                "book_Amos":  { "message": "A-m\u1ed1t" },
-  "book_Obad":  { "message": "\u1ea2p-\u0111i-a" },                "book_Jonah": { "message": "Gi\u00f4-na" },
-  "book_Mic":   { "message": "Mi-ch\u00ea" },                       "book_Nah":   { "message": "Na-hum" },
-  "book_Hab":   { "message": "Ha-ba-cuc" },                          "book_Zeph":  { "message": "S\u00f4-ph\u00f4-ni" },
-  "book_Hag":   { "message": "A-ghê" },                              "book_Zech":  { "message": "Xa-cha-ri" },
-  "book_Mal":   { "message": "Ma-la-chi" },
-  "book_Matt":  { "message": "Ma-thi-\u01a1" },                     "book_Mark":  { "message": "M\u00e1c" },
-  "book_Luke":  { "message": "Lu-ca" },                              "book_John":  { "message": "Gi\u0103ng" },
-  "book_Acts":  { "message": "C\u00f4ng V\u1ee5 C\u00e1c S\u1ee9 \u0110\u1ed3" }, "book_Rom":  { "message": "R\u00f4-ma" },
-  "book_1Cor":  { "message": "I C\u00f4-r\u1eadt" },                "book_2Cor":  { "message": "II C\u00f4-r\u1eadt" },
-  "book_Gal":   { "message": "Ga-la-ti" },                          "book_Eph":   { "message": "\u00ca-ph\u00ea-s\u00f4" },
-  "book_Phil":  { "message": "Phi-líp" },                            "book_Col":   { "message": "C\u00f4-l\u1ed1-se" },
-  "book_1Thess":{ "message": "I T\u00ea-sa-l\u00f4-ni-ca" },       "book_2Thess":{ "message": "II T\u00ea-sa-l\u00f4-ni-ca" },
-  "book_1Tim":  { "message": "I Ti-m\u00f4-th\u00ea" },             "book_2Tim":  { "message": "II Ti-m\u00f4-th\u00ea" },
-  "book_Titus": { "message": "Tít" },                                "book_Phlm":  { "message": "Phi-l\u00ea-m\u00f4n" },
-  "book_Heb":   { "message": "H\u00ea-b\u01a1-r\u01a1" },           "book_Jas":   { "message": "Gia-c\u01a1" },
-  "book_1Pet":  { "message": "I Ph\u00ea-r\u01a1" },                "book_2Pet":  { "message": "II Ph\u00ea-r\u01a1" },
-  "book_1John": { "message": "I Gi\u0103ng" },                      "book_2John": { "message": "II Gi\u0103ng" },
-  "book_3John": { "message": "III Gi\u0103ng" },                    "book_Jude":  { "message": "Giu-\u0111e" },
-  "book_Rev":   { "message": "Kh\u1ea3i Huy\u1ec1n" },
-
-  "dragToReorder": { "message": "K\u00e9o c\u00e1c ti\u00eau \u0111\u1ec1 \u0111\u1ec3 s\u1eafp x\u1ebfp l\u1ea1i" },
-  "saveOrder":     { "message": "L\u01b0u th\u1ee9 t\u1ef1" },
-  "cancelReorder": { "message": "H\u1ee7y" },
-
-  "noHeadingsYet": { "message": "Ch\u01b0a c\u00f3 ti\u00eau \u0111\u1ec1 n\u00e0o" },
-  "emptyStateHint":{ "message": "Nh\u1ea5p \u201cTh\u00eam ti\u00eau \u0111\u1ec1\u201d ho\u1eb7c nh\u1ea5p v\u00e0o m\u1ed9t c\u00e2u Kinh Th\u00e1nh tr\u00ean StepBible.org" },
-
-  "settingsLabel":      { "message": "C\u00e0i \u0111\u1eb7t" },
-  "settingsLanguage":   { "message": "Ng\u00f4n ng\u1eef:" },
-  "colorScheme":        { "message": "B\u1ea3ng m\u00e0u:" },
-  "themeDefault":       { "message": "M\u1eb7c \u0111\u1ecbnh" },
-  "themeGray":          { "message": "X\u00e1m" },
-  "themeBlue":          { "message": "Xanh d\u01b0\u01a1ng" },
-  "headingColors":      { "message": "M\u00e0u ti\u00eau \u0111\u1ec1:" },
-  "downloadsSubfolder": { "message": "Th\u01b0 m\u1ee5c con T\u1ea3i xu\u1ed1ng:" },
-  "backupNow":          { "message": "Sao l\u01b0u ngay" },
-  "googleDriveBackup":  { "message": "Sao l\u01b0u Google Drive" },
-  "driveConnect":       { "message": "K\u1ebft n\u1ed1i" },
-  "driveDisconnect":    { "message": "Ng\u1eaft k\u1ebft n\u1ed1i" },
-
-  "palette_default": { "message": "M\u1eb7c \u0111\u1ecbnh" },
-  "palette_gray":    { "message": "X\u00e1m" },
-  "palette_red":     { "message": "\u0110\u1ecf" },
-  "palette_pink":    { "message": "H\u1ed3ng" },
-  "palette_grape":   { "message": "N\u00e3o m\u00f4ng" },
-  "palette_violet":  { "message": "T\u00edm" },
-  "palette_indigo":  { "message": "Ch\u00e0m" },
-  "palette_blue":    { "message": "Xanh d\u01b0\u01a1ng" },
-  "palette_cyan":    { "message": "Xanh l\u00e1 cyan" },
-  "palette_teal":    { "message": "Xanh l\u00e1 \u0111\u1eadm" },
-  "palette_green":   { "message": "Xanh l\u00e1" },
-  "palette_lime":    { "message": "Xanh chanh" },
-  "palette_yellow":  { "message": "V\u00e0ng" },
-  "palette_orange":  { "message": "Cam" },
-
-  "addHeadingModal":        { "message": "Th\u00eam ti\u00eau \u0111\u1ec1" },
-  "editHeadingModal":       { "message": "Ch\u1ec9nh s\u1eeda ti\u00eau \u0111\u1ec1" },
-  "bookLabel":              { "message": "S\u00e1ch" },
-  "chapterLabel":           { "message": "Ch\u01b0\u01a1ng" },
-  "verseLabel":             { "message": "C\u00e2u" },
-  "midVerse":               { "message": "Gi\u1eefa c\u00e2u" },
-  "midVerseHint":           { "message": "(th\u00eam \u201cb\u201d v\u00e0o tham chi\u1ebfu c\u00e2u Kinh Th\u00e1nh)" },
-  "headingLevel":           { "message": "C\u1ea5p \u0111\u1ed9 ti\u00eau \u0111\u1ec1" },
-  "headingTextLabel":       { "message": "N\u1ed9i dung ti\u00eau \u0111\u1ec1" },
-  "headingTextPlaceholder": { "message": "Nh\u1eadp n\u1ed9i dung ti\u00eau \u0111\u1ec1" },
-  "notesLabel":             { "message": "Ghi ch\u00fa" },
-  "notesPlaceholder":       { "message": "Ghi ch\u00fa t\u00f9y ch\u1ecdn\u2026" },
-  "saveHeading":            { "message": "L\u01b0u ti\u00eau \u0111\u1ec1" },
-  "cancel":                 { "message": "H\u1ee7y" },
-
-  "exportOutline":    { "message": "Xu\u1ea5t ph\u00e1c th\u1ea3o" },
-  "entireOutline":    { "message": "Ton b\u1ed9 ph\u00e1c th\u1ea3o" },
-  "currentBookOnly":  { "message": "Ch\u1ec9 s\u00e1ch hi\u1ec7n t\u1ea1i" },
-  "copyClipboard":    { "message": "Sao ch\u00e9p v\u00e0o b\u1ed9 nh\u1edb t\u1ea1m" },
-  "exportMarkdown":   { "message": "Xu\u1ea5t d\u01b0\u1edbi d\u1ea1ng Markdown" },
-  "exportHtml":       { "message": "Xu\u1ea5t d\u01b0\u1edbi d\u1ea1ng HTML" },
-  "exportXml":        { "message": "Xu\u1ea5t d\u01b0\u1edbi d\u1ea1ng XML" },
-  "exportJson":       { "message": "Xu\u1ea5t d\u01b0\u1edbi d\u1ea1ng JSON" },
-  "exportWord":       { "message": "Xu\u1ea5t d\u01b0\u1edbi d\u1ea1ng Word (.docx)" },
-  "exportOdt":        { "message": "Xu\u1ea5t d\u01b0\u1edbi d\u1ea1ng LibreOffice (.odt)" },
-  "exportPdf":        { "message": "Xu\u1ea5t d\u01b0\u1edbi d\u1ea1ng PDF" },
-  "copiedConfirm":    { "message": "\u0110\u00e3 sao ch\u00e9p!" },
-  "copyFailed":       { "message": "Sao ch\u00e9p th\u1ea5t b\u1ea1i" },
-
-  "importOutline":      { "message": "Nh\u1eadp ph\u00e1c th\u1ea3o" },
-  "importInstructions": { "message": "Nh\u1eadp t\u1ec7p JSON \u0111\u00e3 xu\u1ea5t tr\u01b0\u1edbc \u0111\u00f3 \u0111\u1ec3 kh\u00f4i ph\u1ee5c ph\u00e1c th\u1ea3o c\u1ee7a b\u1ea1n. C\u00e1c ti\u00eau \u0111\u1ec1 s\u1ebd \u0111\u01b0\u1ee3c th\u00eam v\u00e0o c\u01a1 s\u1edf d\u1eef li\u1ec7u hi\u1ec7n t\u1ea1i." },
-  "chooseJsonFile":     { "message": "Ch\u1ecdn t\u1ec7p JSON" },
-
-  "fillInAllFields":  { "message": "Vui l\u00f2ng \u0111i\u1ec1n \u0111\u1ea7y \u0111\u1ee7 c\u00e1c tr\u01b01\u1eddng" },
-  "confirmDelete":    { "message": "B\u1ea1n c\u00f3 ch\u1eafc mu\u1ed1n x\u00f3a ti\u00eau \u0111\u1ec1 n\u00e0y kh\u00f4ng?" },
-  "errorSaving":      { "message": "L\u1ed7i khi l\u01b0u ti\u00eau \u0111\u1ec1: $1" },
-  "errorDeleting":    { "message": "L\u1ed7i khi x\u00f3a ti\u00eau \u0111\u1ec1. Vui l\u00f2ng th\u1eed l\u1ea1i." },
-  "errorSavingOrder": { "message": "L\u1ed7i khi l\u01b0u th\u1ee9 t\u1ef1: $1" },
-  "errorExporting":   { "message": "L\u1ed7i khi xu\u1ea5t ph\u00e1c th\u1ea3o: $1" },
-
-  "readingFile":       { "message": "\u0110ang \u0111\u1ecdc t\u1ec7p\u2026" },
-  "invalidJson":       { "message": "\u0110\u1ecbnh d\u1ea1ng JSON kh\u00f4ng h\u1ee3p l\u1ec7. D\u1ef1 ki\u1ebfn m\u1ed9t m\u1ea3ng." },
-  "importProgress":    { "message": "\u0110ang nh\u1eadp $1 ti\u00eau \u0111\u1ec1\u2026" },
-  "importSuccess":     { "message": "\u2713 \u0110\u00e3 nh\u1eadp th\u00e0nh c\u00f4ng $1 ti\u00eau \u0111\u1ec1" },
-  "importSuccessSkipped": { "message": "\u2713 \u0110\u00e3 nh\u1eadp $1 ti\u00eau \u0111\u1ec1, b\u1ecf qua $2 (tr\u00f9ng l\u1eadp)" },
-  "importSuccessWithSkipped": { "message": "\u2713 \u0110\u00e3 nh\u1eadp $1 ti\u00eau \u0111\u1ec1 (b\u1ecf qua $2)" },
-  "importError":       { "message": "\u2717 L\u1ed7i: $1" },
-
-  "backingUp":             { "message": "\u0110ang sao l\u01b0u\u2026" },
-  "backupLocalSuccess":    { "message": "C\u1ee5c b\u1ed9 \u2713" },
-  "backupLocalFailed":     { "message": "C\u1ee5c b\u1ed9: $1" },
-  "backupDriveFailed":     { "message": "Drive: $1" },
-  "backupNoChange":        { "message": "Kh\u00f4ng c\u00f3 thay \u0111\u1ed5i t\u1eeb l\u1ea7n sao l\u01b0u cu\u1ed1i ($1)" },
-  "backupFailed":          { "message": "Sao l\u01b0u th\u1ea5t b\u1ea1i: $1" },
-  "backupDriveNotSignedIn":{ "message": "Drive: ch\u01b0a \u0111\u0103ng nh\u1eadp" },
-
-  "driveConnecting":       { "message": "\u0110ang k\u1ebft n\u1ed1i\u2026" },
-  "driveConnectedBacking": { "message": "\u0110\u00e3 k\u1ebft n\u1ed1i v\u1edbi t\u01b0 c\u00e1ch $1 \u2014 \u0111ang sao l\u01b0u\u2026" },
-  "driveConnectedSuccess": { "message": "\u0110\u00e3 k\u1ebft n\u1ed1i v\u1edbi t\u01b0 c\u00e1ch $1 \u00b7 Drive \u2713" },
-  "driveConnectionFailed": { "message": "K\u1ebft n\u1ed1i th\u1ea5t b\u1ea1i: $1" },
-  "driveDisconnecting":    { "message": "\u0110ang ng\u1eaft k\u1ebft n\u1ed1i\u2026" },
-  "driveDisconnected":     { "message": "\u0110\u00e3 ng\u1eaft k\u1ebft n\u1ed1i" },
-  "driveError":            { "message": "L\u1ed7i: $1" },
-  "driveSuccess":          { "message": "Drive \u2713" },
-
-  "exportDocTitle":    { "message": "Ph\u00e1c Th\u1ea3o Kinh Th\u00e1nh" },
-  "exportGeneratedOn": { "message": "T\u1ea1o ng\u00e0y $1" }
+  "appName": {
+    "message": "Bố Cục Kinh Thánh"
+  },
+  "appDescription": {
+    "message": "Tạo bố cục cho các sách trong Kinh Thánh với bảng điều hướng bên cạnh"
+  },
+  "togglePanel": {
+    "message": "Hiện/Ẩn bảng Bố cục Kinh Thánh"
+  },
+  "addHeading": {
+    "message": "Thêm tiêu đề"
+  },
+  "addHeadingTitle": {
+    "message": "Thêm tiêu đề mới"
+  },
+  "reorder": {
+    "message": "Sắp xếp lại"
+  },
+  "reorderTitle": {
+    "message": "Sắp xếp lại các tiêu đề"
+  },
+  "importBtn": {
+    "message": "Nhập"
+  },
+  "importBtnTitle": {
+    "message": "Nhập bố cục"
+  },
+  "exportBtn": {
+    "message": "Xuất"
+  },
+  "exportBtnTitle": {
+    "message": "Xuất bố cục"
+  },
+  "currentBookLabel": {
+    "message": "Sách hiện tại:"
+  },
+  "selectBook": {
+    "message": "-- Chọn sách --"
+  },
+  "goToBookTitle": {
+    "message": "Chuyển đến sách này trong Kinh Thánh"
+  },
+  "oldTestament": {
+    "message": "Cựu Ước"
+  },
+  "newTestament": {
+    "message": "Tân Ước"
+  },
+  "book_Gen": {
+    "message": "Sáng Thế Ký"
+  },
+  "book_Exod": {
+    "message": "Xuất Ê-díp-tô Ký"
+  },
+  "book_Lev": {
+    "message": "Lê-vi Ký"
+  },
+  "book_Num": {
+    "message": "Dân Số Ký"
+  },
+  "book_Deut": {
+    "message": "Phục Truyền Luật Lệ Ký"
+  },
+  "book_Josh": {
+    "message": "Giô-suê"
+  },
+  "book_Judg": {
+    "message": "Các Quan Xét"
+  },
+  "book_Ruth": {
+    "message": "Ru-tơ"
+  },
+  "book_1Sam": {
+    "message": "I Sa-mu-ên"
+  },
+  "book_2Sam": {
+    "message": "II Sa-mu-ên"
+  },
+  "book_1Kgs": {
+    "message": "I Các Vua"
+  },
+  "book_2Kgs": {
+    "message": "II Các Vua"
+  },
+  "book_1Chr": {
+    "message": "I Sử Ký"
+  },
+  "book_2Chr": {
+    "message": "II Sử Ký"
+  },
+  "book_Ezra": {
+    "message": "E-xra"
+  },
+  "book_Neh": {
+    "message": "Nê-hê-mi"
+  },
+  "book_Esth": {
+    "message": "Ê-xơ-tê"
+  },
+  "book_Job": {
+    "message": "Gióp"
+  },
+  "book_Ps": {
+    "message": "Thi Thiên"
+  },
+  "book_Prov": {
+    "message": "Châm Ngôn"
+  },
+  "book_Eccl": {
+    "message": "Truyền Đạo"
+  },
+  "book_Song": {
+    "message": "Nhã Ca"
+  },
+  "book_Isa": {
+    "message": "Ê-sai"
+  },
+  "book_Jer": {
+    "message": "Giê-rê-mi"
+  },
+  "book_Lam": {
+    "message": "Ca Thương"
+  },
+  "book_Ezek": {
+    "message": "Ê-xê-chi-ên"
+  },
+  "book_Dan": {
+    "message": "Đa-ni-ên"
+  },
+  "book_Hos": {
+    "message": "Ô-sê"
+  },
+  "book_Joel": {
+    "message": "Giô-ên"
+  },
+  "book_Amos": {
+    "message": "A-mốt"
+  },
+  "book_Obad": {
+    "message": "Áp-đia"
+  },
+  "book_Jonah": {
+    "message": "Giô-na"
+  },
+  "book_Mic": {
+    "message": "Mi-chê"
+  },
+  "book_Nah": {
+    "message": "Na-hum"
+  },
+  "book_Hab": {
+    "message": "Ha-ba-cúc"
+  },
+  "book_Zeph": {
+    "message": "Sô-phô-ni"
+  },
+  "book_Hag": {
+    "message": "A-ghê"
+  },
+  "book_Zech": {
+    "message": "Xa-cha-ri"
+  },
+  "book_Mal": {
+    "message": "Ma-la-chi"
+  },
+  "book_Matt": {
+    "message": "Ma-thi-ơ"
+  },
+  "book_Mark": {
+    "message": "Mác"
+  },
+  "book_Luke": {
+    "message": "Lu-ca"
+  },
+  "book_John": {
+    "message": "Giăng"
+  },
+  "book_Acts": {
+    "message": "Công Vụ Các Sứ Đồ"
+  },
+  "book_Rom": {
+    "message": "Rô-ma"
+  },
+  "book_1Cor": {
+    "message": "I Cô-rinh-tô"
+  },
+  "book_2Cor": {
+    "message": "II Cô-rinh-tô"
+  },
+  "book_Gal": {
+    "message": "Ga-la-ti"
+  },
+  "book_Eph": {
+    "message": "Ê-phê-sô"
+  },
+  "book_Phil": {
+    "message": "Phi-líp"
+  },
+  "book_Col": {
+    "message": "Cô-lô-se"
+  },
+  "book_1Thess": {
+    "message": "I Tê-sa-lô-ni-ca"
+  },
+  "book_2Thess": {
+    "message": "II Tê-sa-lô-ni-ca"
+  },
+  "book_1Tim": {
+    "message": "I Ti-mô-thê"
+  },
+  "book_2Tim": {
+    "message": "II Ti-mô-thê"
+  },
+  "book_Titus": {
+    "message": "Tít"
+  },
+  "book_Phlm": {
+    "message": "Phi-lê-môn"
+  },
+  "book_Heb": {
+    "message": "Hê-bơ-rơ"
+  },
+  "book_Jas": {
+    "message": "Gia-cơ"
+  },
+  "book_1Pet": {
+    "message": "I Phi-e-rơ"
+  },
+  "book_2Pet": {
+    "message": "II Phi-e-rơ"
+  },
+  "book_1John": {
+    "message": "I Giăng"
+  },
+  "book_2John": {
+    "message": "II Giăng"
+  },
+  "book_3John": {
+    "message": "III Giăng"
+  },
+  "book_Jude": {
+    "message": "Giu-đe"
+  },
+  "book_Rev": {
+    "message": "Khải Huyền"
+  },
+  "dragToReorder": {
+    "message": "Kéo các tiêu đề để sắp xếp lại"
+  },
+  "saveOrder": {
+    "message": "Lưu thứ tự"
+  },
+  "cancelReorder": {
+    "message": "Hủy"
+  },
+  "noHeadingsYet": {
+    "message": "Chưa có tiêu đề nào"
+  },
+  "emptyStateHint": {
+    "message": "Nhấp “Thêm tiêu đề” hoặc nhấp vào một câu Kinh Thánh trên StepBible.org"
+  },
+  "settingsLabel": {
+    "message": "Cài đặt"
+  },
+  "settingsLanguage": {
+    "message": "Ngôn ngữ:"
+  },
+  "colorScheme": {
+    "message": "Bảng màu giao diện:"
+  },
+  "themeDefault": {
+    "message": "Mặc định"
+  },
+  "themeGray": {
+    "message": "Xám"
+  },
+  "themeBlue": {
+    "message": "Xanh dương"
+  },
+  "headingColors": {
+    "message": "Màu tiêu đề:"
+  },
+  "downloadsSubfolder": {
+    "message": "Thư mục con Tải xuống:"
+  },
+  "backupNow": {
+    "message": "Sao lưu ngay"
+  },
+  "googleDriveBackup": {
+    "message": "Sao lưu Google Drive"
+  },
+  "driveConnect": {
+    "message": "Kết nối"
+  },
+  "driveDisconnect": {
+    "message": "Ngắt kết nối"
+  },
+  "palette_default": {
+    "message": "Mặc định"
+  },
+  "palette_gray": {
+    "message": "Xám"
+  },
+  "palette_red": {
+    "message": "Đỏ"
+  },
+  "palette_pink": {
+    "message": "Hồng"
+  },
+  "palette_grape": {
+    "message": "Não mông"
+  },
+  "palette_violet": {
+    "message": "Tím"
+  },
+  "palette_indigo": {
+    "message": "Chàm"
+  },
+  "palette_blue": {
+    "message": "Xanh dương"
+  },
+  "palette_cyan": {
+    "message": "Xanh lá cyan"
+  },
+  "palette_teal": {
+    "message": "Xanh lá đậm"
+  },
+  "palette_green": {
+    "message": "Xanh lá"
+  },
+  "palette_lime": {
+    "message": "Xanh chanh"
+  },
+  "palette_yellow": {
+    "message": "Vàng"
+  },
+  "palette_orange": {
+    "message": "Cam"
+  },
+  "addHeadingModal": {
+    "message": "Thêm tiêu đề"
+  },
+  "editHeadingModal": {
+    "message": "Chỉnh sửa tiêu đề"
+  },
+  "bookLabel": {
+    "message": "Sách"
+  },
+  "chapterLabel": {
+    "message": "Chương"
+  },
+  "verseLabel": {
+    "message": "Câu"
+  },
+  "midVerse": {
+    "message": "Giữa câu"
+  },
+  "midVerseHint": {
+    "message": "(thêm “b” vào câu Kinh Thánh)"
+  },
+  "headingLevel": {
+    "message": "Cấp độ tiêu đề"
+  },
+  "headingTextLabel": {
+    "message": "Nội dung tiêu đề"
+  },
+  "headingTextPlaceholder": {
+    "message": "Nhập nội dung tiêu đề"
+  },
+  "notesLabel": {
+    "message": "Ghi chú"
+  },
+  "notesPlaceholder": {
+    "message": "Ghi chú tùy chọn…"
+  },
+  "saveHeading": {
+    "message": "Lưu tiêu đề"
+  },
+  "cancel": {
+    "message": "Hủy"
+  },
+  "exportOutline": {
+    "message": "Xuất bố cục"
+  },
+  "entireOutline": {
+    "message": "Bố cục của tất các sách"
+  },
+  "currentBookOnly": {
+    "message": "Chỉ sách hiện tại"
+  },
+  "copyClipboard": {
+    "message": "Sao chép vào bộ nhớ tạm"
+  },
+  "exportMarkdown": {
+    "message": "Xuất dưới dạng Markdown"
+  },
+  "exportHtml": {
+    "message": "Xuất dưới dạng HTML"
+  },
+  "exportXml": {
+    "message": "Xuất dưới dạng XML"
+  },
+  "exportJson": {
+    "message": "Xuất dưới dạng JSON"
+  },
+  "exportWord": {
+    "message": "Xuất dưới dạng Word (.docx)"
+  },
+  "exportOdt": {
+    "message": "Xuất dưới dạng LibreOffice (.odt)"
+  },
+  "exportPdf": {
+    "message": "Xuất dưới dạng PDF"
+  },
+  "copiedConfirm": {
+    "message": "Đã sao chép!"
+  },
+  "copyFailed": {
+    "message": "Sao chép thất bại"
+  },
+  "importOutline": {
+    "message": "Nhập bố cục"
+  },
+  "importInstructions": {
+    "message": "Nhập tệp JSON đã xuất trước đó để khôi phục bố cục của bạn. Các tiêu đề sẽ được thêm vào cơ sở dữ liệu hiện tại."
+  },
+  "chooseJsonFile": {
+    "message": "Chọn tệp JSON"
+  },
+  "fillInAllFields": {
+    "message": "Vui lòng điền đầy đủ các trường"
+  },
+  "confirmDelete": {
+    "message": "Bạn có chắc muốn xóa tiêu đề này không?"
+  },
+  "errorSaving": {
+    "message": "Lỗi khi lưu tiêu đề: $1"
+  },
+  "errorDeleting": {
+    "message": "Lỗi khi xóa tiêu đề. Vui lòng thử lại."
+  },
+  "errorSavingOrder": {
+    "message": "Lỗi khi lưu thứ tự: $1"
+  },
+  "errorExporting": {
+    "message": "Lỗi khi xuất bố cục: $1"
+  },
+  "readingFile": {
+    "message": "Đang đọc tệp…"
+  },
+  "invalidJson": {
+    "message": "Định dạng JSON không hợp lệ. Dự kiến một mảng."
+  },
+  "importProgress": {
+    "message": "Đang nhập $1 tiêu đề…"
+  },
+  "importSuccess": {
+    "message": "✓ Đã nhập thành công $1 tiêu đề"
+  },
+  "importSuccessSkipped": {
+    "message": "✓ Đã nhập $1 tiêu đề, bỏ qua $2 (trùng lập)"
+  },
+  "importSuccessWithSkipped": {
+    "message": "✓ Đã nhập $1 tiêu đề (bỏ qua $2)"
+  },
+  "importError": {
+    "message": "✗ Lỗi: $1"
+  },
+  "backingUp": {
+    "message": "Đang sao lưu…"
+  },
+  "backupLocalSuccess": {
+    "message": "Cục bộ ✓"
+  },
+  "backupLocalFailed": {
+    "message": "Cục bộ: $1"
+  },
+  "backupDriveFailed": {
+    "message": "Drive: $1"
+  },
+  "backupNoChange": {
+    "message": "Không có thay đổi từ lần sao lưu cuối ($1)"
+  },
+  "backupFailed": {
+    "message": "Sao lưu thất bại: $1"
+  },
+  "backupDriveNotSignedIn": {
+    "message": "Drive: chưa đăng nhập"
+  },
+  "driveConnecting": {
+    "message": "Đang kết nối…"
+  },
+  "driveConnectedBacking": {
+    "message": "Đã kết nối với tư cách $1 — đang sao lưu…"
+  },
+  "driveConnectedSuccess": {
+    "message": "Đã kết nối với tư cách $1 · Drive ✓"
+  },
+  "driveConnectionFailed": {
+    "message": "Kết nối thất bại: $1"
+  },
+  "driveDisconnecting": {
+    "message": "Đang ngắt kết nối…"
+  },
+  "driveDisconnected": {
+    "message": "Đã ngắt kết nối"
+  },
+  "driveError": {
+    "message": "Lỗi: $1"
+  },
+  "driveSuccess": {
+    "message": "Drive ✓"
+  },
+  "exportDocTitle": {
+    "message": "Phác Thảo Kinh Thánh"
+  },
+  "exportGeneratedOn": {
+    "message": "Tạo ngày $1"
+  }
 }
