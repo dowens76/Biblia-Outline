@@ -159,7 +159,8 @@ function setupEventListeners() {
     if (!currentBook) return;
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tabs[0]) {
-      const url = `https://www.stepbible.org/?q=version=ESV|reference=${currentBook}.1&options=NVHUG`;
+      const version = await getCurrentVersion();
+      const url = `https://www.stepbible.org/?q=version=${version}|reference=${currentBook}.1&options=NVHUG`;
       await chrome.tabs.update(tabs[0].id, { url });
     }
   });
@@ -299,6 +300,44 @@ function createHeadingElement(heading) {
   return div;
 }
 
+// ── Bible version detection ───────────────────────────────────────────────────
+
+/**
+ * Extract the Bible version code from a StepBible URL.
+ * Returns null if the URL is not from stepbible.org or has no version parameter.
+ * e.g. "https://www.stepbible.org/?q=version=NIV|reference=Gen.1" → "NIV"
+ *
+ * Future sites: add additional branches here keyed on url hostname.
+ * @param {string} url
+ * @returns {string|null}
+ */
+function getVersionFromTabUrl(url) {
+  if (!url || !url.includes('stepbible.org')) return null;
+  const match = url.match(/[?&]q=[^&]*version=([^|&]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+/**
+ * Get the Bible version to use for navigation URLs.
+ * 1. Reads the version from the currently-active tab's URL (most up-to-date).
+ * 2. Saves it to db.settings so it persists across sessions.
+ * 3. Falls back to the stored setting if no StepBible tab is active.
+ * 4. Final fallback: 'ESV'.
+ * @returns {Promise<string>}
+ */
+async function getCurrentVersion() {
+  try {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const version = getVersionFromTabUrl(tabs[0]?.url);
+    if (version) {
+      await db.setSetting('bibleVersion', version);
+      return version;
+    }
+  } catch (_) {}
+  const stored = await db.getSetting('bibleVersion');
+  return stored || 'ESV';
+}
+
 // Navigate to verse in StepBible
 async function navigateToVerse(reference) {
   console.log('Navigating to verse:', reference);
@@ -314,7 +353,8 @@ async function navigateToVerse(reference) {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tabs[0]) {
       // First, navigate to the chapter (in case it's not loaded)
-      const stepBibleUrl = `https://www.stepbible.org/?q=version=ESV|reference=${book}.${chapter}&options=NVHUG`;
+      const version = await getCurrentVersion();
+      const stepBibleUrl = `https://www.stepbible.org/?q=version=${version}|reference=${book}.${chapter}&options=NVHUG`;
       console.log('Navigating to:', stepBibleUrl);
       
       // Update the tab URL
