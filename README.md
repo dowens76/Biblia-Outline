@@ -1,12 +1,14 @@
 # Bible Outliner - Browser Extension
 
-A Brave/Chrome extension for creating hierarchical outlines of Bible books with verse references. Features a side panel interface that integrates with StepBible.org.
+A Brave/Chrome extension for creating hierarchical outlines of Bible books with verse references. Features a side panel interface that integrates with multiple Bible websites.
 
 ## Features
 
 - **Hierarchical Outlines** — Create headings at 6 levels (H1–H6) with traditional outline numbering (I., A., 1., a., (1), (a))
-- **StepBible Integration** — Hover over any verse at StepBible.org and click "+ Heading" to add a heading at that verse
-- **Smart Navigation** — Click any heading in the panel to jump to that verse in StepBible
+- **Multi-site Integration** — Works with StepBible, YouVersion, Bible Gateway, and Parabible (see [Supported Sites](#supported-sites))
+- **Floating "+ Heading" Button** — Hover over any verse and click "+ Heading" to add a heading at that verse (StepBible, YouVersion, Bible Gateway)
+- **Smart Navigation** — Click any heading in the panel to jump to that verse on whichever Bible site is currently open
+- **Auto-detected Bible Version** — Navigation links use the version currently shown in your active tab (e.g., NIV, ESV, KJV) and persist it across sessions
 - **Automatic Verse Ranges** — Ranges are calculated from each heading to the next heading of equal or higher level
 - **Mid-verse Support** — Mark a heading as mid-verse to append a "b" suffix to the reference (e.g., Gen.1.1b)
 - **Persistent Storage** — All data stored locally in IndexedDB (survives browser restarts, never leaves your device)
@@ -16,6 +18,18 @@ A Brave/Chrome extension for creating hierarchical outlines of Bible books with 
 - **Copy to Clipboard** — Copy the outline as plain text directly to the clipboard (no download needed)
 - **Import** — Re-import a previously exported JSON file to restore or merge headings
 - **Grouped Books** — 1–2 Samuel, 1–2 Kings, 1–2 Chronicles, and Ezra–Nehemiah are treated as single outlines
+- **Google Drive Backup** — Optional automatic backup to Google Drive in addition to local Downloads
+
+## Supported Sites
+
+| Site | Click heading → navigate | Hover verse → add heading |
+|------|:---:|:---:|
+| [StepBible.org](https://www.stepbible.org/) | ✓ | ✓ |
+| [YouVersion (bible.com)](https://www.bible.com/) | ✓ | ✓ |
+| [Bible Gateway](https://www.biblegateway.com/) | ✓ | ✓ |
+| [Parabible](https://parabible.com/) | ✓ | — |
+
+Navigation always opens the same site that is currently active in your browser tab, using the translation already shown there.
 
 ## Installation
 
@@ -38,14 +52,14 @@ A Brave/Chrome extension for creating hierarchical outlines of Bible books with 
 
 ### Opening the Side Panel
 
-1. Navigate to [StepBible.org](https://www.stepbible.org/)
+1. Navigate to any [supported Bible site](#supported-sites)
 2. Click the Bible Outliner extension icon in the toolbar
 3. The side panel opens on the right
 
 ### Creating Headings
 
-**Method 1: From StepBible**
-- Hover over any verse at StepBible.org — a "+ Heading" button appears
+**Method 1: Floating Button (StepBible, YouVersion, Bible Gateway)**
+- Hover over any verse — a "+ Heading" button appears above it
 - Click it; the side panel opens the Add Heading modal pre-filled with that verse reference
 
 **Method 2: Manual Entry**
@@ -58,7 +72,8 @@ A Brave/Chrome extension for creating hierarchical outlines of Bible books with 
 
 ### Navigating with Headings
 
-- Click any heading in the panel to navigate to that verse in StepBible
+- Click any heading in the panel to navigate to that verse on the currently-open Bible site
+- The translation shown in your active tab is preserved — switching to a different version on the site will be reflected the next time you click a heading
 - The current heading is highlighted with a yellow background
 
 ### Verse Ranges
@@ -107,12 +122,14 @@ Click **Import** and select a JSON file previously exported from this extension.
 biblia-outline/
 ├── manifest.json       # Extension configuration (Manifest V3)
 ├── background.js       # Service worker for cross-component messaging
-├── content.js          # Runs on StepBible.org — hover button, verse detection
-├── content.css         # Styles for the StepBible hover button
+├── content.js          # Runs on all supported sites — hover button, verse detection
+├── content.css         # Styles for the hover button
 ├── sidepanel.html      # Side panel UI
 ├── sidepanel.css       # Side panel styles
 ├── sidepanel.js        # Side panel logic and all export generators
 ├── db.js               # IndexedDB database operations
+├── backup.js           # Local Downloads backup logic
+├── drive.js            # Google Drive backup logic
 └── icons/
     ├── icon16.png
     ├── icon48.png
@@ -146,13 +163,29 @@ Standard OSIS abbreviations are used throughout.
 
 ## Technical Notes
 
-### Why IndexedDB?
+### Multi-site Integration
 
-IndexedDB is the browser's built-in database and provides persistent, indexed, transactional storage with an async API.
+The content script (`content.js`) detects the current hostname at load time and activates the appropriate adapter for each site:
 
-### StepBible Integration
+| Site | Verse element | Reference format |
+|------|--------------|-----------------|
+| StepBible | `<a class="verseLink" name="Gen.1.1">` | OSIS (`Gen.1.1`) |
+| YouVersion | `<span data-usfm="GEN.1.1">` | USFM → converted to OSIS |
+| Bible Gateway | `<span class="text Gen-1-1">` | Hyphen class → converted to OSIS |
+| Parabible | *(no verse elements)* | URL path parsed for context |
 
-The content script looks for `<a class="verseLink">` elements with `name` attributes in `Book.Chapter.Verse` format, matching StepBible's current HTML structure. Hover events inject a floating "+ Heading" button; clicks send an `OPEN_HEADING_MODAL_WITH_VERSE` message directly to the side panel.
+Hover events inject a floating "+ Heading" button (suppressed on Parabible); clicks send an `OPEN_HEADING_MODAL_WITH_VERSE` message directly to the side panel. All references are stored internally in OSIS format regardless of which site they were captured on.
+
+### Navigation URL Building
+
+When a heading is clicked, `sidepanel.js` reads the active tab's URL to determine the current site and translation, then builds the appropriate navigation URL:
+
+- **StepBible:** `https://www.stepbible.org/?q=version=ESV|reference=Gen.1&options=NVHUG`
+- **YouVersion:** `https://www.bible.com/bible/59/GEN.1.ESV` (numeric version ID preserved from URL)
+- **Bible Gateway:** `https://www.biblegateway.com/passage/?search=Genesis%201&version=ESV`
+- **Parabible:** `https://parabible.com/Genesis/1`
+
+The detected version is persisted to IndexedDB settings so it is remembered when switching between tabs.
 
 ### OSIS Reference Format
 
@@ -176,22 +209,22 @@ Built for Brave; works in any Chromium-based browser:
 
 ## Troubleshooting
 
-**Side panel won't open:** Make sure you're on stepbible.org and click the extension icon in the toolbar.
+**Side panel won't open:** Click the extension icon in the toolbar while on any supported Bible site.
 
-**"+ Heading" button doesn't appear on hover:** Refresh the StepBible page after installing or reloading the extension.
+**"+ Heading" button doesn't appear on hover:** Refresh the page after installing or reloading the extension. Note: Parabible does not support the hover button (no verse-level elements on that site).
 
 **Headings not saving:** Open the browser console (F12 → Console) to check for errors. IndexedDB may be disabled in private/incognito mode.
 
-**StepBible navigation not working:** The content script may not be running — check the console. StepBible may have updated their HTML structure.
+**Navigation lands on the wrong translation:** The extension reads the version from your currently active tab URL. If the version code cannot be parsed from the URL, it falls back to the last saved version or ESV. Make sure you have visited the target site with the desired version at least once.
 
 **Export not downloading:** Check if your browser is blocking downloads and allow them in browser settings.
 
 ## Privacy
 
-- All data is stored locally in your browser
-- No data is sent to any server
-- No activity tracking
-- Works completely offline after the StepBible page loads
+- All outline data is stored locally in your browser's IndexedDB
+- No outline data is ever sent to any server
+- No activity tracking or analytics
+- Optional Google Drive backup sends data only to your own Google Drive account
 
 ## License
 
@@ -199,4 +232,4 @@ MIT License — free to use, modify, and distribute.
 
 ## Credits
 
-Created for biblical study and exegesis. Designed to work with [StepBible.org](https://www.stepbible.org/).
+Created for biblical study and exegesis. Works with [StepBible.org](https://www.stepbible.org/), [YouVersion (bible.com)](https://www.bible.com/), [Bible Gateway](https://www.biblegateway.com/), and [Parabible](https://parabible.com/).
