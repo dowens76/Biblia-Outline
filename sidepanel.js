@@ -756,6 +756,7 @@ function generateJSONExport(headings) {
       level: h.level,
       reference: h.reference,
       book: h.book,
+      ...(h.notes ? { notes: h.notes } : {}),
       startRef: h.startRef,
       endRef: h.endRef
     }))
@@ -1269,7 +1270,8 @@ async function handleImportFile(event) {
           book: item.book,
           reference: item.reference,
           level: item.level,
-          text: item.text
+          text: item.text,
+          notes: item.notes || ''
         });
         imported++;
       } catch (err) {
