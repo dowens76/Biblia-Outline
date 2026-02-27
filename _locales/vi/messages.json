@@ -592,5 +592,14 @@
   },
   "copyNoSource": {
     "message": "Không tìm thấy tiêu đề trong phạm vi đã chọn."
+  },
+  "tagCheckLabel": {
+    "message": "Mục ngoài dàn bài"
+  },
+  "tagPlaceholder": {
+    "message": "Nhãn (vd. Bối cảnh)"
+  },
+  "tagRequiredAlert": {
+    "message": "Vui lòng nhập nhãn cho mục ngoài dàn bài."
   }
 }

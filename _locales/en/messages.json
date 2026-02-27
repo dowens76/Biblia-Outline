@@ -710,5 +710,17 @@
   "copyNoSource": {
     "message": "No headings found in source outline for the selected scope.",
     "description": "Warning when the source has no headings for the chosen scope"
+  },
+  "tagCheckLabel": {
+    "message": "Non-outline item",
+    "description": "Checkbox label for marking a heading as a non-outline background/aside item"
+  },
+  "tagPlaceholder": {
+    "message": "Label (e.g. Background)",
+    "description": "Placeholder for the tag label input field"
+  },
+  "tagRequiredAlert": {
+    "message": "Please enter a label for the non-outline item.",
+    "description": "Alert when user checks the tag checkbox but leaves the label blank"
   }
 }

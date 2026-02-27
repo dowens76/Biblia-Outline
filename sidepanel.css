@@ -1175,3 +1175,30 @@ body.reorder-mode .heading-item:hover .heading-actions {
   font-size: 13px;
   cursor: pointer;
 }
+
+/* ── Non-outline tagged items ─────────────────────────────────────────────── */
+
+.heading-item.tagged {
+  border-left-style: dashed;
+}
+
+.heading-item.tagged .heading-text {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.tag-label {
+  display: inline-block;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  color: var(--accent);
+  background: var(--bg-mid);
+  border: 1px solid var(--accent-border);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin-right: 3px;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}

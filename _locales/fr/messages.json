@@ -592,5 +592,14 @@
   },
   "copyNoSource": {
     "message": "Aucun titre trouvé pour la portée sélectionnée."
+  },
+  "tagCheckLabel": {
+    "message": "Élément hors plan"
+  },
+  "tagPlaceholder": {
+    "message": "Étiquette (ex. Arrière-plan)"
+  },
+  "tagRequiredAlert": {
+    "message": "Veuillez saisir une étiquette pour l'élément hors plan."
   }
 }

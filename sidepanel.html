@@ -375,6 +375,29 @@
                     data-i18n-placeholder="notesPlaceholder"
                     placeholder="Optional notes&#8230;"></textarea>
         </div>
+
+        <!-- Non-outline tag -->
+        <div class="form-group">
+          <label class="check-label">
+            <input type="checkbox" id="tagCheck">
+            <span data-i18n="tagCheckLabel">Non-outline item</span>
+          </label>
+        </div>
+        <div class="form-group" id="tagInputRow" style="display:none;">
+          <input type="text" id="tagInput" class="form-control"
+                 list="tagSuggestions"
+                 data-i18n-placeholder="tagPlaceholder"
+                 placeholder="Label (e.g. Background)">
+          <datalist id="tagSuggestions">
+            <option value="Background">
+            <option value="Excursus">
+            <option value="Historical Note">
+            <option value="Cultural Context">
+            <option value="Application">
+            <option value="Theological Note">
+            <option value="Aside">
+          </datalist>
+        </div>
       </div>
       <div class="modal-footer">
         <button id="cancelBtn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>

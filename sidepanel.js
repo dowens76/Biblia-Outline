@@ -496,6 +496,10 @@ function setupEventListeners() {
   document.getElementById('closeModal').addEventListener('click', closeModal);
   document.getElementById('cancelBtn').addEventListener('click', closeModal);
   document.getElementById('saveHeadingBtn').addEventListener('click', saveHeading);
+  document.getElementById('tagCheck').addEventListener('change', function () {
+    document.getElementById('tagInputRow').style.display = this.checked ? 'block' : 'none';
+    if (!this.checked) document.getElementById('tagInput').value = '';
+  });
   
   // Level buttons
   document.querySelectorAll('.level-btn').forEach(btn => {
@@ -683,10 +687,10 @@ function renderHeadings(headings) {
 // Create heading element
 function createHeadingElement(heading) {
   const div = document.createElement('div');
-  div.className = `heading-item level-${heading.level}`;
+  div.className = `heading-item level-${heading.level}${heading.tag ? ' tagged' : ''}`;
   div.dataset.id = heading.id;
   div.dataset.reference = heading.reference;
-  
+
   // Format the verse range, prefixing book abbr when showing a grouped view
   const grouped = getBooksToLoad(currentBook).length > 1;
   const fmtRef = (ref) => {
@@ -696,10 +700,15 @@ function createHeadingElement(heading) {
   const startDisplay = fmtRef(heading.startRef);
   const endDisplay = heading.endRef !== heading.startRef ?
     ` – ${fmtRef(heading.endRef)}` : '';
-  
+
+  const prefixHtml = heading.tag
+    ? `<span class="tag-label">${heading.tag}</span>`
+    : `<span class="outline-num">${heading.prefix || ''}</span>`;
+  const bodyText = heading.tag ? `[${heading.text}]` : heading.text;
+
   div.innerHTML = `
     <span class="drag-handle" aria-hidden="true">&#8801;</span>
-    <span class="heading-text"><span class="outline-num">${heading.prefix || ''}</span> ${heading.text}</span>
+    <span class="heading-text">${prefixHtml} ${bodyText}</span>
     <span class="heading-reference">(${startDisplay}${endDisplay})</span>
     <div class="heading-actions">
       <button class="action-btn edit" title="Edit">✏️</button>
@@ -901,6 +910,9 @@ function openAddHeadingModal() {
   document.getElementById('midVerseCheck').checked = false;
   document.getElementById('headingText').value = '';
   document.getElementById('headingNotes').value = '';
+  document.getElementById('tagCheck').checked = false;
+  document.getElementById('tagInput').value = '';
+  document.getElementById('tagInputRow').style.display = 'none';
 
   // Reset level selection
   document.querySelectorAll('.level-btn').forEach(btn => {
@@ -925,6 +937,9 @@ function openAddHeadingModalWithVerse(reference) {
   document.getElementById('midVerseCheck').checked = false;
   document.getElementById('headingText').value = '';
   document.getElementById('headingNotes').value = '';
+  document.getElementById('tagCheck').checked = false;
+  document.getElementById('tagInput').value = '';
+  document.getElementById('tagInputRow').style.display = 'none';
 
   // Reset level selection
   document.querySelectorAll('.level-btn').forEach(btn => {
@@ -950,13 +965,17 @@ function openEditHeadingModal(heading) {
   document.getElementById('midVerseCheck').checked = midVerse;
   document.getElementById('headingText').value = heading.text;
   document.getElementById('headingNotes').value = heading.notes || '';
-  
+  const hasTag = !!heading.tag;
+  document.getElementById('tagCheck').checked = hasTag;
+  document.getElementById('tagInput').value = heading.tag || '';
+  document.getElementById('tagInputRow').style.display = hasTag ? 'block' : 'none';
+
   // Set level
   document.querySelectorAll('.level-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.level === heading.level.toString());
   });
   selectedHeadingLevel = heading.level;
-  
+
   document.getElementById('headingModal').classList.add('active');
   document.getElementById('headingText').focus();
 }
@@ -975,6 +994,8 @@ async function saveHeading() {
   const midVerse = document.getElementById('midVerseCheck').checked;
   const text = document.getElementById('headingText').value.trim();
   const notes = document.getElementById('headingNotes').value.trim();
+  const tagChecked = document.getElementById('tagCheck').checked;
+  const tagValue   = document.getElementById('tagInput').value.trim();
 
   console.log('Save heading called:', { book, chapter, verse, midVerse, text, notes, level: selectedHeadingLevel });
 
@@ -982,10 +1003,15 @@ async function saveHeading() {
     alert(i18n.t('fillInAllFields'));
     return;
   }
+  if (tagChecked && !tagValue) {
+    alert(i18n.t('tagRequiredAlert'));
+    return;
+  }
+  const tag = tagChecked ? tagValue : '';
 
   const reference = `${book}.${chapter}.${verse}${midVerse ? 'b' : ''}`;
   console.log('Reference:', reference);
-  
+
   try {
     if (editingHeadingId) {
       // Update existing
@@ -995,7 +1021,8 @@ async function saveHeading() {
         reference,
         level: selectedHeadingLevel,
         text,
-        notes
+        notes,
+        tag
       });
       console.log('Heading updated successfully');
     } else {
@@ -1007,7 +1034,8 @@ async function saveHeading() {
         level: selectedHeadingLevel,
         text,
         notes,
-        setId: currentSetId
+        setId: currentSetId,
+        tag
       });
       console.log('Heading added successfully with id:', id);
     }
@@ -1152,8 +1180,12 @@ function generateMarkdownExport(headings) {
       const startDisplay = db.formatReference(heading.startRef);
       const endDisplay = heading.endRef !== heading.startRef
         ? `\u2013${db.formatReference(heading.endRef)}` : '';
-      const hashes = '#'.repeat(heading.level);
-      md += `${hashes} ${heading.prefix} ${heading.text} *(${startDisplay}${endDisplay})*\n\n`;
+      if (heading.tag) {
+        md += `*${heading.tag} [${heading.text}]* *(${startDisplay}${endDisplay})*\n\n`;
+      } else {
+        const hashes = '#'.repeat(heading.level);
+        md += `${hashes} ${heading.prefix} ${heading.text} *(${startDisplay}${endDisplay})*\n\n`;
+      }
     }
   }
 
@@ -1174,7 +1206,11 @@ function generatePlainTextExport(headings) {
       const endDisplay = heading.endRef !== heading.startRef
         ? `\u2013${db.formatReference(heading.endRef)}` : '';
       const pad = indent[heading.level - 1] || '';
-      text += `${pad}${heading.prefix} ${heading.text} (${startDisplay}${endDisplay})\n`;
+      if (heading.tag) {
+        text += `${pad}${heading.tag} [${heading.text}] (${startDisplay}${endDisplay})\n`;
+      } else {
+        text += `${pad}${heading.prefix} ${heading.text} (${startDisplay}${endDisplay})\n`;
+      }
     }
   }
 
@@ -1234,6 +1270,7 @@ function generateHTMLExport(headings) {
     h4 { color: #C07840; } h5 { color: #9E7B50; } h6 { color: #8B8AA0; }
     .num { font-variant-numeric: tabular-nums; margin-right: 4px; }
     .reference { color: #999; font-size: 0.9em; font-family: monospace; }
+    .tagged-item { font-style: italic; color: #888; border-left: 3px dashed #ccc; padding-left: 8px; margin: 4px 0; }
   </style>
 </head>
 <body>
@@ -1247,7 +1284,12 @@ function generateHTMLExport(headings) {
       const startDisplay = db.formatReference(heading.startRef);
       const endDisplay = heading.endRef !== heading.startRef ?
         `\u2013${db.formatReference(heading.endRef)}` : '';
-      html += `  <h${heading.level}><span class="num">${heading.prefix}</span> ${heading.text} <span class="reference">(${startDisplay}${endDisplay})</span></h${heading.level}>\n`;
+      if (heading.tag) {
+        const indent = (heading.level - 1) * 20;
+        html += `  <p class="tagged-item" style="margin-left:${indent}px"><em>${heading.tag} [${heading.text}]</em> <span class="reference">(${startDisplay}${endDisplay})</span></p>\n`;
+      } else {
+        html += `  <h${heading.level}><span class="num">${heading.prefix}</span> ${heading.text} <span class="reference">(${startDisplay}${endDisplay})</span></h${heading.level}>\n`;
+      }
     }
   }
 
@@ -1294,6 +1336,7 @@ function generateJSONExport(headings) {
       reference: h.reference,
       book: h.book,
       ...(h.notes ? { notes: h.notes } : {}),
+      ...(h.tag   ? { tag:   h.tag   } : {}),
       startRef: h.startRef,
       endRef: h.endRef
     }))
@@ -1331,6 +1374,7 @@ function assignOutlineNumbers(groups) {
   return groups.map(group => {
     const counters = [0, 0, 0, 0, 0, 0];
     const headings = group.headings.map(h => {
+      if (h.tag) return { ...h, prefix: '' }; // non-outline: no numbering, no counter changes
       const idx = h.level - 1;
       counters[idx]++;
       for (let i = idx + 1; i < 6; i++) counters[i] = 0;
@@ -1552,13 +1596,23 @@ ${groups.map((_, i) =>
       const ref = h.endRef !== h.startRef
         ? `${db.formatReference(h.startRef)}\u2013${db.formatReference(h.endRef)}`
         : db.formatReference(h.startRef);
-      paragraphs += `  <w:p>
+      if (h.tag) {
+        const indentTwips = (h.level - 1) * 360;
+        paragraphs += `  <w:p>
+    <w:pPr><w:pStyle w:val="Normal"/><w:ind w:left="${indentTwips}"/></w:pPr>
+    <w:r><w:rPr><w:i/><w:color w:val="888888"/></w:rPr>
+      <w:t xml:space="preserve">${x(h.tag)} [${x(h.text)}] (${ref})</w:t>
+    </w:r>
+  </w:p>\n`;
+      } else {
+        paragraphs += `  <w:p>
     <w:pPr>
       <w:pStyle w:val="${H[h.level - 1].id}"/>
       <w:numPr><w:ilvl w:val="${h.level - 1}"/><w:numId w:val="${numId}"/></w:numPr>
     </w:pPr>
     <w:r><w:t xml:space="preserve">${x(h.text)} (${ref})</w:t></w:r>
   </w:p>\n`;
+      }
     }
   });
 
@@ -1643,6 +1697,14 @@ ${ODT_LEVELS.map(l => {
       <style:text-properties fo:font-size="20pt" fo:font-weight="bold" fo:color="#5C2008"/>
     </style:style>`;
 
+  const taggedStyles = [1,2,3,4,5,6].map(lvl => {
+    const marginCm = ((lvl - 1) * 0.7).toFixed(1);
+    return `    <style:style style:name="P_TAGGED_L${lvl}" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="${marginCm}cm" fo:border-left="0.08cm dashed #bbbbbb" fo:padding-left="0.2cm"/>
+      <style:text-properties fo:font-style="italic" fo:color="#888888"/>
+    </style:style>`;
+  }).join('\n');
+
   const groups = groupHeadingsByBook(headings);
   let body = `    <text:p text:style-name="P_BT">${x(i18n.t('exportDocTitle'))}</text:p>\n`;
   for (const group of groups) {
@@ -1652,7 +1714,11 @@ ${ODT_LEVELS.map(l => {
         ? `${db.formatReference(h.startRef)}\u2013${db.formatReference(h.endRef)}`
         : db.formatReference(h.startRef);
       // text:h + text:outline-level picks up the outline-style numbering automatically
-      body += `    <text:h text:outline-level="${h.level}" text:style-name="H${h.level}">${x(h.text)} (${ref})</text:h>\n`;
+      if (h.tag) {
+        body += `    <text:p text:style-name="P_TAGGED_L${h.level}">${x(h.tag)} [${x(h.text)}] (${ref})</text:p>\n`;
+      } else {
+        body += `    <text:h text:outline-level="${h.level}" text:style-name="H${h.level}">${x(h.text)} (${ref})</text:h>\n`;
+      }
     }
   }
 
@@ -1666,6 +1732,7 @@ ${ODT_LEVELS.map(l => {
   <office:automatic-styles>
 ${autoStyles}
 ${pBtStyle}
+${taggedStyles}
   </office:automatic-styles>
   <office:body>
     <office:text>

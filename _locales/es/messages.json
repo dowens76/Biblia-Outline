@@ -592,5 +592,14 @@
   },
   "copyNoSource": {
     "message": "No se encontraron títulos en el alcance seleccionado."
+  },
+  "tagCheckLabel": {
+    "message": "Elemento fuera del esquema"
+  },
+  "tagPlaceholder": {
+    "message": "Etiqueta (p. ej. Trasfondo)"
+  },
+  "tagRequiredAlert": {
+    "message": "Ingrese una etiqueta para el elemento fuera del esquema."
   }
 }

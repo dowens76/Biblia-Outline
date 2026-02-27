@@ -592,5 +592,14 @@
   },
   "copyNoSource": {
     "message": "Keine Überschriften im gewählten Bereich gefunden."
+  },
+  "tagCheckLabel": {
+    "message": "Kein Gliederungselement"
+  },
+  "tagPlaceholder": {
+    "message": "Bezeichnung (z. B. Hintergrund)"
+  },
+  "tagRequiredAlert": {
+    "message": "Bitte geben Sie eine Bezeichnung ein."
   }
 }
