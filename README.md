@@ -135,6 +135,7 @@ Click **Import** and select a JSON file previously exported from this extension.
 ## Languages
 
 The side panel interface can be switched to any supported language via the **Settings** panel. The selected language is persisted across sessions.
+*Note: Spanish, French, and German are AI-generated locales and have not been checked.
 
 | Language | Code | Book names source |
 |---|---|---|
