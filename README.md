@@ -4,7 +4,7 @@ A Brave/Chrome extension for creating hierarchical outlines of Bible books with 
 
 ## Features
 
-- **Hierarchical Outlines** — Create headings at 6 levels (H1–H6) with traditional outline numbering (I., A., 1., a., (1), (a))
+- **Hierarchical Outlines** — Create headings at 6 levels (H1–H6); choose from three outline formats: Traditional (I., A., 1., a., (1), (a)), Thematic (A/B/C… with recurring-theme subscripts), or Plot Analysis (narrative element labels)
 - **Multi-site Integration** — Works with StepBible, YouVersion, Bible Gateway, and Parabible (see [Supported Sites](#supported-sites))
 - **Floating "+ Heading" Button** — Hover over any verse and click "+ Heading" to add a heading at that verse (StepBible, YouVersion, Bible Gateway)
 - **Smart Navigation** — Click any heading in the panel to jump to that verse on whichever Bible site is currently open
@@ -19,6 +19,7 @@ A Brave/Chrome extension for creating hierarchical outlines of Bible books with 
 - **Import** — Re-import a previously exported JSON file to restore or merge headings
 - **Grouped Books** — 1–2 Samuel, 1–2 Kings, 1–2 Chronicles, and Ezra–Nehemiah are treated as single outlines
 - **Multiple Outline Sets** — Create any number of named outline sets (e.g. "English Study", "Vietnamese Translation"), each tagged with a language; switch the active set instantly from the set selector bar
+- **Three Outline Formats** — Switch between Traditional, Thematic, and Plot Analysis formats from the Settings panel; all export formats reflect the active format
 - **Google Drive Backup** — Optional automatic backup to Google Drive in addition to local Downloads
 - **Multi-language Interface** — Switch the panel language via Settings; supports English, Spanish, French, German, and Vietnamese — including all 66 Bible book names
 
@@ -71,6 +72,8 @@ Navigation always opens the same site that is currently active in your browser t
 4. Choose a heading level (H1–H6)
 5. Enter the heading text and optional notes
 6. Click **Save Heading**
+
+> **Note:** When the active outline format is **Thematic**, the level selector is replaced by a **Theme** text field. When it is **Plot Analysis**, the level selector is replaced by a **Plot element** dropdown.
 
 ### Navigating with Headings
 
