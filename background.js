@@ -1,15 +1,11 @@
 // background.js - Service worker for the extension
 
-// Persistent port to the side panel — more reliable than runtime.sendMessage in MV3
-let sidePanelPort = null;
-
-chrome.runtime.onConnect.addListener((port) => {
-  if (port.name === 'sidepanel') {
-    sidePanelPort = port;
-    port.onDisconnect.addListener(() => {
-      if (sidePanelPort === port) sidePanelPort = null;
-    });
-  }
+// Allow content scripts to read/write chrome.storage.session.
+// By default the session store is restricted to trusted extension pages only;
+// this call opens it to untrusted contexts (content scripts) as well so that
+// the floating "+ Heading" button can signal the side panel via storage changes.
+chrome.storage.session.setAccessLevel({
+  accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS'
 });
 
 // Toggle side panel when extension icon is clicked
@@ -17,10 +13,11 @@ chrome.action.onClicked.addListener((tab) => {
   chrome.sidePanel.open({ tabId: tab.id });
 });
 
-// Listen for messages from content script and side panel
+// Listen for messages from the side panel
+// (content-script → side-panel actions now go via chrome.storage.session)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'NAVIGATE_TO_VERSE') {
-    // Navigate StepBible to specific verse
+    // Navigate the active Bible-site tab to a specific verse
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
         chrome.tabs.sendMessage(tabs[0].id, {
@@ -30,7 +27,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     });
   } else if (message.type === 'GET_CURRENT_BOOK') {
-    // Get current book from the active Bible site page
+    // Ask the active Bible-site tab which book is currently displayed
     const SUPPORTED_HOSTS = ['stepbible.org', 'bible.com', 'biblegateway.com', 'parabible.com'];
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0] && SUPPORTED_HOSTS.some(s => (tabs[0].url || '').includes(s))) {
@@ -41,14 +38,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     });
     return true;
-  } else if (message.type === 'OPEN_HEADING_MODAL_WITH_VERSE' ||
-             message.type === 'HIGHLIGHT_HEADING') {
-    // Relay content-script → side panel via persistent port.
-    // chrome.runtime.sendMessage from content scripts doesn't reliably reach
-    // side panels in MV3, so we use the stored port instead.
-    if (sidePanelPort) {
-      sidePanelPort.postMessage(message);
-    }
   }
 });
 

@@ -627,12 +627,19 @@ async function init() {
   await initDrive();
   await maybeAutoBackup();
 
-  // Connect to the background service worker via a persistent port so that
-  // content-script messages (OPEN_HEADING_MODAL_WITH_VERSE, HIGHLIGHT_HEADING)
-  // are reliably relayed here. chrome.runtime.sendMessage from content scripts
-  // doesn't always reach side panels in MV3 when the service worker is dormant.
-  const bgPort = chrome.runtime.connect({ name: 'sidepanel' });
-  bgPort.onMessage.addListener(handleMessage);
+  // Listen for actions triggered by the content script via session storage.
+  // chrome.runtime.sendMessage from content scripts doesn't reliably reach
+  // side panels in MV3; chrome.storage.onChanged fires in all contexts
+  // directly, with no dependency on the service worker being alive.
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== 'session') return;
+    if (changes.pendingHeadingRef) {
+      openAddHeadingModalWithVerse(changes.pendingHeadingRef.newValue.reference);
+    }
+    if (changes.pendingHighlightRef) {
+      highlightHeadingByReference(changes.pendingHighlightRef.newValue.reference);
+    }
+  });
 }
 
 // Setup event listeners

@@ -177,7 +177,7 @@ function extractReference(element) {
       z-index: 2147483647;
       display: none;
       padding: 3px 9px;
-      background: #7B3410;
+      background: #0f2040;
       color: #fff;
       font-size: 11px;
       font-weight: 700;
@@ -191,14 +191,14 @@ function extractReference(element) {
       pointer-events: auto;
       transition: background 0.15s;
     }
-    #bible-outline-float-btn:hover { background: #5C2008; }
+    #bible-outline-float-btn:hover { background: #0f2040; }
     #bible-outline-float-btn::after {
       content: '';
       position: absolute;
       top: 100%;
       left: 10px;
       border: 5px solid transparent;
-      border-top-color: #7B3410;
+      border-top-color: #0f2040;
     }
   `;
   document.head.appendChild(style);
@@ -295,8 +295,9 @@ function handleVerseClick(element, event) {
     event.stopPropagation();
     createHeadingFromVerse(reference);
   } else {
-    chrome.runtime.sendMessage({ type: 'HIGHLIGHT_HEADING', reference })
-      .catch(() => {});
+    try {
+      chrome.storage.session.set({ pendingHighlightRef: { reference, ts: Date.now() } });
+    } catch (e) { /* extension context invalidated — page needs refresh */ }
   }
 }
 
@@ -382,10 +383,14 @@ function getCurrentBook() {
 }
 
 function createHeadingFromVerse(reference) {
-  // Send directly to the side panel — skips the background relay which is
-  // unreliable in MV3 service workers (re-broadcast from onMessage can fail).
-  chrome.runtime.sendMessage({ type: 'OPEN_HEADING_MODAL_WITH_VERSE', reference })
-    .catch(() => {}); // suppress "no receivers" error if side panel is closed
+  // Write to session storage so the side panel picks it up via onChanged.
+  // This is far more reliable than chrome.runtime.sendMessage in MV3 —
+  // storage changes are broadcast to all extension contexts directly,
+  // with no dependency on the service worker being alive.
+  // The timestamp makes every click a distinct event, even on the same verse.
+  try {
+    chrome.storage.session.set({ pendingHeadingRef: { reference, ts: Date.now() } });
+  } catch (e) { /* extension context invalidated — page needs refresh */ }
 
   // Brief highlight on the verse element as visual feedback
   highlightVerseElement(reference);
@@ -403,7 +408,7 @@ function highlightVerseElement(reference) {
     el = document.querySelector(`span[class*="text ${parts[0]}-${parts[1]}-${parts[2]}"]`);
   } else {
     el = document.querySelector(
-      `[name="${reference}"], [data-verse="${reference}"], #${reference}`
+      `[name="${reference}"], [data-verse="${reference}"], [id="${reference}"]`
     );
   }
 
@@ -432,7 +437,7 @@ function scrollToVerse(reference) {
     const selectors = [
       `[name="${reference}"]`,
       `[data-verse="${reference}"]`,
-      `#${reference}`,
+      `[id="${reference}"]`,
       `.verse[data-verse="${reference}"]`
     ];
     for (const selector of selectors) {
