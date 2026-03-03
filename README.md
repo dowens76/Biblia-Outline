@@ -8,10 +8,10 @@ If you use this extension and have feedback, you may share that at https://forms
 
 ## Features
 
-- **Hierarchical Outlines** — Create headings at 6 levels (H1–H6); choose from three outline formats: Traditional (I., A., 1., a., (1), (a)), Thematic (A/B/C… with recurring-theme subscripts), or Plot Analysis (narrative element labels)
+- **Three kinds of Outlines** — Traditional (I., A., 1., a., (1), (a)), Thematic (A/B/C… with recurring-theme subscripts), or Plot Analysis (narrative element labels such as conflict and resolution)
 - **Multi-site Integration** — Works with StepBible, YouVersion, Bible Gateway, and Parabible (see [Supported Sites](#supported-sites))
-- **Floating "+ Heading" Button** — Hover over any verse and click "+ Heading" to add a heading at that verse (StepBible, YouVersion, Bible Gateway)
-- **Smart Navigation** — Click any heading in the panel to jump to that verse on whichever Bible site is currently open
+- **Floating "+ Heading" Button** — Hover over any verse on a fully supported site and click "+ Heading" to add a heading at that verse (StepBible, YouVersion, Bible Gateway)
+- **Smart Navigation** — Click any heading in the side panel to jump to that verse on whichever Bible site is currently open (Default: StepBible)
 - **Auto-detected Bible Version** — Navigation links use the version currently shown in your active tab (e.g., NIV, ESV, KJV) and persist it across sessions
 - **Automatic Verse Ranges** — Ranges are calculated from each heading to the next heading of equal or higher level
 - **Mid-verse Support** — Mark a heading as mid-verse to append a "b" suffix to the reference (e.g., Gen.1.1b)
@@ -19,12 +19,11 @@ If you use this extension and have feedback, you may share that at https://forms
 - **Reorder Headings** — Manually drag and drop headings into any order; order is saved to the database
 - **Notes** — Add optional notes to any heading
 - **Multiple Export Formats** — Export to Markdown, HTML, XML, JSON, Word (.docx), LibreOffice (.odt), and PDF
-- **Copy to Clipboard** — Copy the outline as plain text directly to the clipboard (no download needed)
+- **Copy to Clipboard** — Copy the outline as plain text directly to the clipboard
 - **Import** — Re-import a previously exported JSON file to restore or merge headings
 - **Grouped Books** — 1–2 Samuel, 1–2 Kings, 1–2 Chronicles, and Ezra–Nehemiah are treated as single outlines
-- **Multiple Outline Sets** — Create any number of named outline sets (e.g. "English Study", "Vietnamese Translation"), each tagged with a language; switch the active set instantly from the set selector bar
-- **Three Outline Formats** — Switch between Traditional, Thematic, and Plot Analysis formats from the Settings panel; all export formats reflect the active format
-- **Google Drive Backup** — Optional automatic backup to Google Drive in addition to local Downloads
+- **Multiple Outline Sets** — Create any number of named outline sets (e.g. "English Study", "Vietnamese Translation"), each tagged with a language; switch the active set from the set selector bar
+- **Local and Google Drive Backup** — Optional automatic backup to Google Drive in addition to local Downloads
 - **Multi-language Interface** — Switch the panel language via Settings; supports English, Spanish, French, German, and Vietnamese — including all 66 Bible book names
 
 ## Supported Sites
@@ -36,13 +35,13 @@ If you use this extension and have feedback, you may share that at https://forms
 | [Bible Gateway](https://www.biblegateway.com/) | ✓ | ✓ |
 | [Parabible](https://parabible.com/) | ✓ | — |
 
-Navigation always opens the same site that is currently active in your browser tab, using the translation already shown there.
+Navigation always opens the same site that is currently active in your browser tab, using the translation already shown there. When no page is open, the default is to open StepBible.
 
 ## Installation
 
 ### For Brave/Chrome
 
-1. **Download the extension files** to a folder on your computer
+1. **Download the extension files** to a folder on your computer (Download the files from [the latest release](https://github.com/dowens76/Bible-Outliner/releases))
 
 2. **Open Extension Management:**
    - Brave: `brave://extensions`
@@ -51,7 +50,7 @@ Navigation always opens the same site that is currently active in your browser t
 3. **Enable Developer Mode** — toggle it in the top-right corner
 
 4. **Load the Extension:**
-   - Click "Load unpacked"
+   - Click "Load unpacked" (in the top-left corner)
    - Select the folder containing the extension files
    - The extension icon should appear in your toolbar
 
@@ -66,11 +65,11 @@ Navigation always opens the same site that is currently active in your browser t
 ### Creating Headings
 
 **Method 1: Floating Button (StepBible, YouVersion, Bible Gateway)**
-- Hover over any verse — a "+ Heading" button appears above it
-- Click it; the side panel opens the Add Heading modal pre-filled with that verse reference
+- Hover over any verse number — a "+ Heading" button appears above it
+- Click it; the side panel opens the Add Heading screen pre-filled with that verse reference
 
 **Method 2: Manual Entry**
-1. Click **+ Add Heading** in the side panel
+1. Click **+ Add Heading** in the side panel, just under the extension name
 2. Select the book, chapter, and verse
 3. Optionally check **Mid-verse** to append a "b" suffix
 4. Choose a heading level (H1–H6)
@@ -81,7 +80,7 @@ Navigation always opens the same site that is currently active in your browser t
 
 ### Navigating with Headings
 
-- Click any heading in the panel to navigate to that verse on the currently-open Bible site
+- Click any heading in the panel to navigate to that verse on the currently-open Bible site (or open a new tab with StepBible)
 - The translation shown in your active tab is preserved — switching to a different version on the site will be reflected the next time you click a heading
 - The current heading is highlighted with a yellow background
 
@@ -92,7 +91,7 @@ Ranges are calculated automatically:
 - The range extends until the next heading of **equal or higher level**
 - For mid-verse headings, the preceding heading at the same level ends at the "a" half of the same verse
 - Ranges are displayed in parentheses: `(1:1–2:5)`
-- Grouped books (e.g., 1–2 Samuel) extend ranges across both books
+- Grouped books (1–2 Samuel, 1–2 Kings, 1–2 Chronicles, and Ezra-Nehemiah) extend ranges across both books
 
 ### Outline Formats
 
@@ -104,20 +103,11 @@ Headings are numbered using the classic legal-outline scheme: **I., A., 1., a., 
 
 #### Thematic
 
-Designed for tracking recurring themes across a passage — useful for chiastic structures, repeating motifs, and intertextual patterns.
+Designed for tracking recurring themes across a passage — useful for chiastic structures and repeating motifs.
 
-- Each heading is assigned a **theme identifier** — a short label you type in the modal (e.g., "covenant", "blessing"). The modal auto-suggests identifiers already in use.
+- Each heading is assigned a **theme identifier** (A, B, C, etc.) 
 - The extension assigns letters **A, B, C…** to theme identifiers in the order they first appear. The letter rank also determines indentation: A headings are flush left (level-1 indent), B headings are indented one level, C headings two levels, and so on.
 - When the **same theme identifier appears more than once**, Unicode subscripts are added automatically: **A₁, A₂, A₃…** If a theme appears only once, no subscript is shown.
-
-**Example** — a Pauline chiasm:
-```
-A  Paul's greeting (1:1–2)
-  B  Thanksgiving (1:3–11)
-    C  Paul's travel plans (1:12–26)
-  B₁ Exhortation to unity (1:27–2:18)
-A₁ Timothy and Epaphroditus (2:19–30)
-```
 
 #### Plot Analysis
 
@@ -132,15 +122,6 @@ Designed for narrative analysis of biblical stories. Each heading is assigned to
 | **Final Situation** | The new state of affairs at the story's end |
 
 When the same plot element appears more than once, a counter is added automatically: **Conflict 1**, **Conflict 2**, etc. All plot headings are displayed at the same indentation level.
-
-**Example:**
-```
-Initial Situation    Abraham and Sarah are childless (Gen 11:30)
-Conflict             God commands Abraham to leave his country (Gen 12:1)
-Transforming Action  Abraham obeys; God promises blessing (Gen 12:2–3)
-Resolution           Abraham arrives in Canaan; God confirms the promise (Gen 12:4–7)
-Final Situation      Abraham builds an altar and continues toward the Negev (Gen 12:8–9)
-```
 
 ### Outline Sets
 
