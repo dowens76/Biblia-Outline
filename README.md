@@ -2,6 +2,8 @@
 
 A Brave/Chrome extension for creating hierarchical outlines of Bible books with verse references. Features a side panel interface that integrates with multiple Bible websites.
 
+A video introducing the extension is available at https://youtu.be/grkEEm8DrCU.
+
 If you use this extension and have feedback, you may share that at https://forms.gle/vu76uWbjWZ137pzQ6. 
 
 ## Features
